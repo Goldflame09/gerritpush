@@ -85,8 +85,17 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 	else
 	  new_branch
 	fi
-    PROJECT=`grep PAC-man .git/config | awk -F/ '{print $NF}'`
+    echo "Please enter project to upload to
+---------------------------------"
+    read PROJECT
+    echo "You have entered: ${PROJECT}"
+    echo -n "Is this correct? (y/n): "
+    read PROr
+    if [ "${PROr}" = "y" ] || [ "${PROr}" == "Y" ]; then
     git push ssh://${GUZER}@review.pac-rom.com:29418/${PROJECT} HEAD:refs/\for/${BRANCH}
+    else
+      echo "Canceled"
+    fi
 else
   echo "Canceled"
 fi
