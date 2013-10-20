@@ -6,8 +6,8 @@
 #                                                                 #
 ###################################################################
 
-VERSION=0.9
-BUILD=9
+VERSION=0.1
+BUILD=1
 
 set_up_user(){
 if [ -f ${HOME}/.gum/username ]; then
