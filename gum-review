@@ -2,12 +2,12 @@
 
 ###################################################################
 #                                                                 #
-# Created by Sniper/Goldflame09/wedgess/Papa Smurf151 for Gummy   #
+# Created by Sniper/Goldflame09/wedgess/Papa Smurf151 for PAC-man #
 #                                                                 #
 ###################################################################
 
-VERSION=0.1
-BUILD=1
+VERSION=0.9
+BUILD=9
 
 set_up_user(){
 if [ -f ${HOME}/.gum/username ]; then
@@ -82,6 +82,14 @@ elif [ "${RESPa}" == "n" ] || [ "${RESPa}" == "N" ]; then
 		echo "Take your time and come back when you are ready"
 	fi
 fi
+}
+
+
+author () {
+echo "Please enter username of author"
+echo -n "Username: "
+read auser
+git commit --amend --author ${auser}
 }
 
 
@@ -189,5 +197,6 @@ case $1 in
    -ssh|sshkey)sshkey;;
    -ap|add+push)ap;;
    -am|amend)amend;;
+   -au|author)author;;
    -h|help|*)error;;
 esac
