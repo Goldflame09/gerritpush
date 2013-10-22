@@ -170,6 +170,7 @@ error () {
    echo "   add+push   	(-ap)  --- Add and push to gerrit"
    echo "   amend  	(-am)  --- Amend the commit and push"
    echo "   name   	(-n)   --- View or edit your gerrit username"
+   echo "   author      (-au)  --- Change author of commit"
    echo "   push   	(-p)   --- Push to gerrit"
    echo "   sshkey 	(-ssh) --- Create/show SSH key to put on Gerrit"
 
