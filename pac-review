@@ -10,18 +10,18 @@ VERSION=0.9
 BUILD=9
 
 set_up_user(){
-if [ -f ${HOME}/.pac/username ]; then
-   GUZER=`cat ${HOME}/.pac/username`
+if [ -f ${HOME}/.gerritpush/username ]; then
+   GUZER=`cat ${HOME}/.gerritpush/username`
 else
    echo -n "Please enter your Gerrit UserName: "; read GUZER
    echo "Your entered ${GUZER} is this correct"
    echo "Enter 1 for Yes or 2 for No"
    select correct1 in "Yes" "No"; do
    case ${correct1} in
-        Yes ) mkdir -p ${HOME}/.pac;
-              echo ${GUZER} > ${HOME}/.pac/username;
+        Yes ) mkdir -p ${HOME}/.gerritpush;
+              echo ${GUZER} > ${HOME}/.gerritpush/username;
               echo "Your new gerrit username is: ${GUZER}"; break;;
-        No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.pac; echo ${GUZER} > ${HOME}/.pac/username; echo "Your new gerrit username is: ${GUZER}"; break;;
+        No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
         *) clear; echo "Invalid Entry ${correct1}, Please enter a number between [1 - 2]"; echo; set_up_user; break;;
    esac
  done
@@ -30,20 +30,135 @@ fi
 
 
 new_branch() {
-   rm -f ${HOME}/.pac/branch
-   echo "Please enter the branch you want to upload to:"
-   echo "GH-PAGES is ONLY for PacPapers!!"
-   select correct3 in "CM-10.1" "CM-10.2" "GH-PAGES"; do
-     case ${correct3} in
-        CM-10.1 ) BRANCH="cm-10.1"; break;;
-        CM-10.2 ) BRANCH="cm-10.2"; break;;
-        GH-PAGES ) BRANCH="gh-pages"; break;;
-        * ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-     esac
-   done
-   echo ${BRANCH} > ${HOME}/.pac/branch
-   BRANCH=`cat ${HOME}/.pac/branch`
-   echo "Your new current branch is: ${BRANCH}"
+	if { "${Choice}" == "AOKP" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		echo "GH-PAGES is ONLY for PacPapers!!"
+		select correct3 in "jb-mr2" "jb-mr1" "GH-PAGES"; do
+		case ${correct3} in
+			jb-mr2 ) BRANCH="jb-mr2"; break;;
+			jb-mr1 ) BRANCH="jb-mr1"; break;;
+			GH-PAGES ) BRANCH="gh-pages"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Carbon" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		echo "GH-PAGES is ONLY for PacPapers!!"
+		select correct3 in "jb3" "jb2"; do
+		case ${correct3} in
+			jb3 ) BRANCH="jb3"; break;;
+			jb2 ) BRANCH="jb2"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Chameleon" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		select correct3 in "jellybean-mr1" "jellybean-mr2.1"; do
+		case ${correct3} in
+			jellybean-mr1 ) BRANCH="jellybean-mr1"; break;;
+			jellybean-mr2.1 ) BRANCH="jellybean-mr2.1"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "CyanogenMod" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		select correct3 in "CM-10.1" "CM-10.2"; do
+		case ${correct3} in
+			CM-10.1 ) BRANCH="cm-10.1"; break;;
+			CM-10.2 ) BRANCH="cm-10.2"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Dirty-Unicorns" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		echo "GH-PAGES & du43is ONLY for DirtWalls!!"
+		select correct3 in "jb-mr2" "jb-mr1" "du43" "GH-PAGES"; do
+		case ${correct3} in
+			jb-mr2 ) BRANCH="jb-mr2"; break;;
+			jb-mr1 ) BRANCH="jb-mr1"; break;;
+			du43 ) BRANCH="du43"; break;;
+			GH-PAGES ) BRANCH="gh-pages"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Gummy" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		BRANCH="jb4.3"
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Omni" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		BRANCH="android-4.3"
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Paranoid-Android" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		echo "GH-PAGES is ONLY for PacPapers!!"
+		select correct3 in "CM-10.1" "CM-10.2" "GH-PAGES"; do
+		case ${correct3} in
+			CM-10.1 ) BRANCH="cm-10.1"; break;;
+			CM-10.2 ) BRANCH="cm-10.2"; break;;
+			GH-PAGES ) BRANCH="gh-pages"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "PAC" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		echo "GH-PAGES is ONLY for PacPapers!!"
+		select correct3 in "CM-10.1" "CM-10.2" "GH-PAGES"; do
+		case ${correct3} in
+			CM-10.1 ) BRANCH="cm-10.1"; break;;
+			CM-10.2 ) BRANCH="cm-10.2"; break;;
+			GH-PAGES ) BRANCH="gh-pages"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
+	elif { "${Choice}" == "Vanir" }; then
+		rm -f ${HOME}/.gerritpush/branch
+		echo "Please enter the branch you want to upload to:"
+		echo "GH-PAGES is ONLY for PacPapers!!"
+		select correct3 in "jb" "jb42" "jb42-master" "jb43"; do
+		case ${correct3} in
+			jb ) BRANCH="jb"; break;;
+			jb42 ) BRANCH="jb42"; break;;
+			jb42-master ) BRANCH="jb42-master"; break;;
+			jb43 ) BRANCH="jb43"; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
+		esac
+		done
+		echo ${BRANCH} > ${HOME}/.gerritpush/branch
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+		echo "Your new current branch is: ${BRANCH}"
 }
 
 correct_commit() {
@@ -61,7 +176,7 @@ echo "Enter 1 for Yes and 2 for No"
 
 ap () {
 git add -A
-scp -p -P 29418 ${GUZER}@review.pac-rom.com:hooks/commit-msg .git/hooks/
+scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
    echo "Add commit message below.
 --------------------------"
    read MSSG
@@ -74,11 +189,11 @@ push
 push () {
 echo -n "Are you sure you want to push? (y/n): "; read RESP
 if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
-	if [ -f ${HOME}/.pac/branch ]; then
-  	  echo "Current branch: `cat ${HOME}/.pac/branch`"
+	if [ -f ${HOME}/.gerritpush/branch ]; then
+  	  echo "Current branch: `cat ${HOME}/.gerritpush/branch`"
   	  echo -n "Push to current branch? (y/n): "; read CTPUSH
   		if [ "${CTPUSH}" == "y" ] || [ "${CTPUSH}" == "Y" ]; then
-			BRANCH=`cat ${HOME}/.pac/branch`
+			BRANCH=`cat ${HOME}/.gerritpush/branch`
   		else
 			new_branch
   		fi
@@ -86,7 +201,7 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 	  new_branch
 	fi
     PROJECT=`grep PAC-man .git/config | awk -F/ '{print $NF}'`
-    git push ssh://${GUZER}@review.pac-rom.com:29418/${PROJECT} HEAD:refs/\for/${BRANCH}
+    git push ssh://${GUZER}@${GTEAM}:29418/${PROJECT} HEAD:refs/\for/${BRANCH}
 else
   echo "Canceled"
 fi
@@ -127,8 +242,8 @@ echo "Your entered ${GUZER} is this correct?"
 echo "Enter 1 for Yes and 2 for No"
    select correct1 in "Yes" "No"; do
    case ${correct1} in
-	Yes ) mkdir ${HOME}/.pac; echo ${GUZER} > ${HOME}/.pac/username; echo "Your new gerrit username is: ${GUZER}"; break;;
-	No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.pac; echo ${GUZER} > ${HOME}/.pac/username; echo "Your new gerrit username is: ${GUZER}"; break;;
+	Yes ) mkdir ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
+	No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
 	* ) clear; echo "Invalid Entry ${correct1}, Please re-try"; echo; echo; correct_gname break ;;
    esac
   done
@@ -138,7 +253,7 @@ echo "Enter 1 for Yes and 2 for No"
 nameq_question() {
   select NAME in "View" "New"; do
    case ${NAME} in
-      View ) if [ -f ${HOME}/.pac/username ]; then
+      View ) if [ -f ${HOME}/.gerritpush/username ]; then
            echo "Your current gerrit username is: ${GUZER}";
 	  else
 	   echo "No gerrit username found..";
@@ -162,7 +277,7 @@ sshkey () {
 if [ -e ${HOME}/.ssh/id_rsa.pub ]; then
    echo "SSH Key already exists.
 
-Go to PAC Gerrit (http://review.pac-rom.com), sign in, go to settings, 
+Go to PAC Gerrit (http://review.gerritpush-rom.com), sign in, go to settings, 
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -170,7 +285,7 @@ read -p "Press [Enter] to open file..."
    gnome-open ${HOME}/.ssh/id_rsa.pub
 else
    ssh-keygen
-   echo "Go to PAC Gerrit (http://review.pac-rom.com), sign in, go to settings, 
+   echo "Go to PAC Gerrit (http://review.gerritpush-rom.com), sign in, go to settings, 
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -179,19 +294,56 @@ read -p "Press [Enter] to open file..."
 fi
 }
 
+team () {
+	if { -f ${HOME}/.gerritpush/team }; then
+		GTEAM=`cat ${HOME}/.gerritpush/team`
+	else
+		echo -n "Please enter your Choose your Gerrit Team:
+		echo -n "Enter the Corresponding Number"
+		echo -n "1. AOKP"
+		echo -n "2. Carbon"
+		echo -n "3. Chameleon OS"
+		echo -n "4. CyanogenMod"
+		echo -n "5. Dirty Unicorns"
+		echo -n "6. Gummy"
+		echo -n "7. Omni"
+		echo -n "8. Paranoid Android"
+		echo -n "9. PAC"
+		echo -n "10. Vanir"
+		select NUMBER in "1" "2" "3" "4" "5" "6" "7" "8" "9" "10"
+		case ${NUMBER} in
+			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
+			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
+			3 ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
+			4 ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
+			5 ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
+			6 ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
+			7 ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
+			8 ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
+			9 ) CHOICE="Pac"; GTEAM="review.pac-rom.com" ; break;;
+			10 ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; team; break;;
+		esac
+		done
+	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
+	mkdir -p ${HOME}/.gerritpush; echo ${Choice} > ${HOME}/.gerritpush/teamchoice;
+	echo "Default Set to ${Choice}"
+	fi
+}
+
 
 new () {
-   curl http://pac-rom.com/downloads/pac-review > ${HOME}/.pac/.new
-   sed -i '12,132d' ${HOME}/.pac/.new
-   NEWB=`grep BUILD= ${HOME}/.pac/.new | sed "s/BUILD=//g"`
-   NEWV=`grep VERSION= ${HOME}/.pac/.new | sed "s/VERSION=//g"`
+   curl http:/.gerritpush-rom.com/downloads.gerritpush-review > ${HOME}/.gerritpush/.new
+   sed -i '12,132d' ${HOME}/.gerritpush/.new
+   NEWB=`grep BUILD= ${HOME}/.gerritpush/.new | sed "s/BUILD=//g"`
+   NEWV=`grep VERSION= ${HOME}/.gerritpush/.new | sed "s/VERSION=//g"`
 }
 
 ask_the_question() {
 echo -n "Are you sure you want to update to version: ${NEWV} build: ${NEWB}? (yes/no)"
 select correct4 in "Yes" "No"; do
   case ${correct4} in
-      Yes ) rm -f ${HOME}/.pac/pac-review; mv ${HOME}/.pac/.new ${HOME}/bin/pac-review; chmod +x ${HOME}/bin/pac-review; echo; echo "Successfully updated to v${NEWV}!"; break;;
+      Yes ) rm -f ${HOME}/.gerritpush.gerritpush-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin.gerritpush-review; chmod +x ${HOME}/bin.gerritpush-review; echo; echo "Successfully updated to v${NEWV}!"; break;;
       No ) echo "Update canceled"; break ;;
       * ) clear; echo "Invalid option ${correct4}, Please try again..."; echo; ask_the_question; break;;
    esac
@@ -209,15 +361,15 @@ fi
 
 uf () {
    new
-   mv ${HOME}/.pac/.new ${HOME}/bin/pac-review
-   chmod +x ${HOME}/bin/pac-review
+   mv ${HOME}/.gerritpush/.new ${HOME}/bin.gerritpush-review
+   chmod +x ${HOME}/bin.gerritpush-review
    echo "Forced update to v${NEWV}!"
 }
 
 error () {
    echo " "
-   echo "Usage: pac-review [-short command]"
-   echo "Or:    pac-review [long comand]"
+   echo "Usage:.gerritpush-review [-short command]"
+   echo "Or:   .gerritpush-review [long comand]"
    echo " "
    echo "Commands:"
    echo "   add+push   	(-ap)  --- Add and push to gerrit"
@@ -236,7 +388,7 @@ error () {
    echo "   3. Your public ssh key is attached to your gerrit profile"
    echo " "
    echo "If you still encounter problems, ask on the official PAC-man forum at:"
-   echo "http://forum.pac-rom.com . . . . Press Control + Click to open URL"
+   echo "http://forum.gerritpush-rom.com . . . . Press Control + Click to open URL"
    echo " "
 
 }
