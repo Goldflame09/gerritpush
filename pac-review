@@ -30,7 +30,7 @@ fi
 
 
 new_branch() {
-	if { "${Choice}" == "AOKP" }; then
+	if [ "${Choice}" == "AOKP" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -45,7 +45,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Carbon" }; then
+	elif [ "${Choice}" == "Carbon" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -59,7 +59,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Chameleon" }; then
+	elif [ "${Choice}" == "Chameleon" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		select correct3 in "jellybean-mr1" "jellybean-mr2.1"; do
@@ -72,7 +72,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "CyanogenMod" }; then
+	elif [ "${Choice}" == "CyanogenMod" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		select correct3 in "CM-10.1" "CM-10.2"; do
@@ -85,7 +85,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Dirty-Unicorns" }; then
+	elif [ "${Choice}" == "Dirty-Unicorns" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES & du43is ONLY for DirtWalls!!"
@@ -101,19 +101,19 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Gummy" }; then
+	elif [ "${Choice}" == "Gummy" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		BRANCH="jb4.3"
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Omni" }; then
+	elif [ "${Choice}" == "Omni" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		BRANCH="android-4.3"
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Paranoid-Android" }; then
+	elif [ "${Choice}" == "Paranoid-Android" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -128,7 +128,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "PAC" }; then
+	elif [ "${Choice}" == "PAC" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -143,7 +143,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif { "${Choice}" == "Vanir" }; then
+	elif [ "${Choice}" == "Vanir" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -159,6 +159,7 @@ new_branch() {
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
+fi
 }
 
 correct_commit() {
@@ -295,10 +296,10 @@ fi
 }
 
 team () {
-	if { -f ${HOME}/.gerritpush/team }; then
+	if [ -f ${HOME}/.gerritpush/team ]; then
 		GTEAM=`cat ${HOME}/.gerritpush/team`
 	else
-		echo -n "Please enter your Choose your Gerrit Team:
+		echo -n "Please enter your Choose your Gerrit Team:"
 		echo -n "Enter the Corresponding Number"
 		echo -n "1. AOKP"
 		echo -n "2. Carbon"
@@ -310,7 +311,7 @@ team () {
 		echo -n "8. Paranoid Android"
 		echo -n "9. PAC"
 		echo -n "10. Vanir"
-		select NUMBER in "1" "2" "3" "4" "5" "6" "7" "8" "9" "10"
+		select NUMBER in "1" "2" "3" "4" "5" "6" "7" "8" "9" "10";do
 		case ${NUMBER} in
 			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
 			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
@@ -368,13 +369,13 @@ uf () {
 
 error () {
    echo " "
-   echo "Usage:.gerritpush-review [-short command]"
-   echo "Or:   .gerritpush-review [long comand]"
+   echo "Usage: gerritpush-review [-short command]"
+   echo "Or:    gerritpush-review [long comand]"
    echo " "
    echo "Commands:"
    echo "   add+push   	(-ap)  --- Add and push to gerrit"
    echo "   amend  	(-am)  --- Amend the commit and push"
-   echo "   author      (-au)  --- Change author of commit"
+   echo "   author       (-au)  --- Change author of commit"
    echo "   force	(-uf)  --- Force the script to grab a new version"
    echo "   name   	(-n)   --- View or edit your gerrit username"
    echo "   branch	(-nb)  --- Choose a new branch to push to"
