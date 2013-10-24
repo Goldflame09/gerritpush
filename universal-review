@@ -51,7 +51,7 @@ new_team() {
 		fi
 		echo "Please Select your new Gerrit Team:"
 		echo "Enter the Corresponding Number"
-		select NUMBER in "1. AOKP" "2. Carbon" "3. Chameleon OS" "4. CyanogenMod" "5. Dirty Unicorns" "6. Gummy" "7. Omni" "8. Paranoid Android" "9. PAC" "10. Vanir";do
+		select NUMBER in "AOKP" "Carbon" "Chameleon OS" "CyanogenMod" "Dirty Unicorns" "Gummy" "Omni" "Paranoid Android" "PAC" "Vanir";do
 		case ${NUMBER} in
 			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
 			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
