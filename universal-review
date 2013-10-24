@@ -28,8 +28,81 @@ else
 fi
 }
 
+team() {
+	if [ -f ${HOME}/.gerritpush/team ]; then
+		GTEAM=`cat ${HOME}/.gerritpush/team`
+		Choice=`cat ${HOME}/.gerritpush/teamchoice`
+	else
+		new_team
+	fi
+}
+
+
+new_team() {
+		if [ -f ${HOME}/.gerritpush/team ]; then
+			DisplayTeam=`cat ${HOME}/.gerritpush/teamchoice`
+			echo ""
+			echo "###################################################################"
+			echo ""
+			echo "Your gerrit team is set to: ${DisplayTeam}"
+			echo ""
+			echo "###################################################################"
+			echo ""
+		fi
+		echo -n "Please Select your new Gerrit Team:"
+		echo -n "Enter the Corresponding Number"
+		echo -n "1. AOKP"
+		echo -n "2. Carbon"
+		echo -n "3. Chameleon OS"
+		echo -n "4. CyanogenMod"
+		echo -n "5. Dirty Unicorns"
+		echo -n "6. Gummy"
+		echo -n "7. Omni"
+		echo -n "8. Paranoid Android"
+		echo -n "9. PAC"
+		echo -n "10. Vanir"
+		select NUMBER in "1" "2" "3" "4" "5" "6" "7" "8" "9" "10";do
+		case ${NUMBER} in
+			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
+			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
+			3 ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
+			4 ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
+			5 ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
+			6 ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
+			7 ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
+			8 ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
+			9 ) CHOICE="Pac"; GTEAM="review.pac-rom.com" ; break;;
+			10 ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
+			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; team; break;;
+		esac
+		done
+	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
+	mkdir -p ${HOME}/.gerritpush; echo ${Choice} > ${HOME}/.gerritpush/teamchoice;
+	echo "Default Set to ${Choice}"
+}
+
+
+branch() {
+	if [ -f ${HOME}/.gerritpush/branch ]; then
+		BRANCH=`cat ${HOME}/.gerritpush/branch`
+	else
+		new_branch
+	fi
+}
+
 
 new_branch() {
+	if [ -f ${HOME}/.gerritpush/branch ]; then
+		DisplayBranch1=`cat ${HOME}/.gerritpush/branch`
+		echo ""
+		echo "###################################################################"
+		echo ""
+		echo "Your current branch is set to: ${DisplayBranch1}"
+		echo ""
+		echo "###################################################################"
+		echo ""
+	fi
+	team
 	if [ "${Choice}" == "AOKP" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
@@ -43,7 +116,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "Carbon" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -57,7 +129,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "Chameleon" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -70,7 +141,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "CyanogenMod" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -83,7 +153,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "Dirty-Unicorns" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -99,7 +168,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "Gummy" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -111,7 +179,6 @@ new_branch() {
 		rm -f ${HOME}/.gerritpush/branch
 		BRANCH="android-4.3"
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "Paranoid-Android" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -126,7 +193,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "PAC" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -141,7 +207,6 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 	elif [ "${Choice}" == "Vanir" ]; then
 		rm -f ${HOME}/.gerritpush/branch
@@ -157,10 +222,10 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
 fi
 }
+
 
 correct_commit() {
 clear; echo ${MSSG}; echo
@@ -175,19 +240,8 @@ echo "Enter 1 for Yes and 2 for No"
   done
 }
 
-ap () {
-git add -A
-scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
-   echo "Add commit message below.
---------------------------"
-   read MSSG
-   correct_commit
-git commit -a -m "${MSSG}"
-push
-}
 
-
-push () {
+push() {
 echo -n "Are you sure you want to push? (y/n): "; read RESP
 if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 	if [ -f ${HOME}/.gerritpush/branch ]; then
@@ -209,7 +263,19 @@ fi
 }
 
 
-amend () {
+ap() {
+git add -A
+scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
+   echo "Add commit message below.
+--------------------------"
+   read MSSG
+   correct_commit
+git commit -a -m "${MSSG}"
+push
+}
+
+
+amend() {
    echo -n "Have you edited the files?/Do you want to change commit message? (y/n):"; read RESPa
 if [ "${RESPa}" == "y" ] || [ "${RESPa}" == "Y" ]; then
    git add -A
@@ -230,7 +296,7 @@ fi
 }
 
 
-author () {
+author() {
 echo "Please enter username of author"
 echo -n "Username: "
 read auser
@@ -266,7 +332,7 @@ nameq_question() {
 }
 
 
-name () {
+name() {
    echo "Enter an option:"
    echo "   1. View your current gerrit username"
    echo "   2. Enter a new gerrit username"
@@ -274,11 +340,18 @@ name () {
 }
 
 
-sshkey () {
+sshkey() {
+team
+echo ""
+echo "Your gerrit team is set to: ${Choice}"
+echo ""
+echo "You will have to set this up for every Team's Gerrit"
+echo "But can use the same sshkeys for all"
+echo ""
 if [ -e ${HOME}/.ssh/id_rsa.pub ]; then
    echo "SSH Key already exists.
 
-Go to PAC Gerrit (http://review.gerritpush-rom.com), sign in, go to settings, 
+Go to ${Choice} Gerrit (${GTEAM}), sign in, go to settings, 
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -286,7 +359,7 @@ read -p "Press [Enter] to open file..."
    gnome-open ${HOME}/.ssh/id_rsa.pub
 else
    ssh-keygen
-   echo "Go to PAC Gerrit (http://review.gerritpush-rom.com), sign in, go to settings, 
+   echo "Go to ${Choice} Gerrit (${GTEAM}), sign in, go to settings, 
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -295,46 +368,9 @@ read -p "Press [Enter] to open file..."
 fi
 }
 
-team () {
-	if [ -f ${HOME}/.gerritpush/team ]; then
-		GTEAM=`cat ${HOME}/.gerritpush/team`
-	else
-		echo -n "Please enter your Choose your Gerrit Team:"
-		echo -n "Enter the Corresponding Number"
-		echo -n "1. AOKP"
-		echo -n "2. Carbon"
-		echo -n "3. Chameleon OS"
-		echo -n "4. CyanogenMod"
-		echo -n "5. Dirty Unicorns"
-		echo -n "6. Gummy"
-		echo -n "7. Omni"
-		echo -n "8. Paranoid Android"
-		echo -n "9. PAC"
-		echo -n "10. Vanir"
-		select NUMBER in "1" "2" "3" "4" "5" "6" "7" "8" "9" "10";do
-		case ${NUMBER} in
-			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
-			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
-			3 ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
-			4 ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
-			5 ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
-			6 ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
-			7 ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
-			8 ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
-			9 ) CHOICE="Pac"; GTEAM="review.pac-rom.com" ; break;;
-			10 ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; team; break;;
-		esac
-		done
-	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
-	mkdir -p ${HOME}/.gerritpush; echo ${Choice} > ${HOME}/.gerritpush/teamchoice;
-	echo "Default Set to ${Choice}"
-	fi
-}
 
-
-new () {
-   curl http:/.gerritpush-rom.com/downloads.gerritpush-review > ${HOME}/.gerritpush/.new
+new() {
+   curl http:/pac-rom.com/downloads/universal-review > ${HOME}/.gerritpush/.new
    sed -i '12,132d' ${HOME}/.gerritpush/.new
    NEWB=`grep BUILD= ${HOME}/.gerritpush/.new | sed "s/BUILD=//g"`
    NEWV=`grep VERSION= ${HOME}/.gerritpush/.new | sed "s/VERSION=//g"`
@@ -344,14 +380,15 @@ ask_the_question() {
 echo -n "Are you sure you want to update to version: ${NEWV} build: ${NEWB}? (yes/no)"
 select correct4 in "Yes" "No"; do
   case ${correct4} in
-      Yes ) rm -f ${HOME}/.gerritpush.gerritpush-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin.gerritpush-review; chmod +x ${HOME}/bin.gerritpush-review; echo; echo "Successfully updated to v${NEWV}!"; break;;
+      Yes ) rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; echo; echo "Successfully updated to v${NEWV}!"; break;;
       No ) echo "Update canceled"; break ;;
       * ) clear; echo "Invalid option ${correct4}, Please try again..."; echo; ask_the_question; break;;
    esac
 done
 }
 
-update () {
+
+update() {
    new
    if [ "${BUILD}" == "${NEWB}" ]; then
       echo; echo "Already up to date (v${VERSION})"
@@ -360,54 +397,107 @@ update () {
 fi
 }
 
-uf () {
+
+uf() {
    new
-   mv ${HOME}/.gerritpush/.new ${HOME}/bin.gerritpush-review
-   chmod +x ${HOME}/bin.gerritpush-review
+   mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review
+   chmod +x ${HOME}/bin/universal-review
    echo "Forced update to v${NEWV}!"
 }
 
-error () {
-   echo " "
-   echo "Usage: gerritpush-review [-short command]"
-   echo "Or:    gerritpush-review [long comand]"
-   echo " "
-   echo "Commands:"
-   echo "   add+push   	(-ap)  --- Add and push to gerrit"
-   echo "   amend  	(-am)  --- Amend the commit and push"
-   echo "   author       (-au)  --- Change author of commit"
-   echo "   force	(-uf)  --- Force the script to grab a new version"
-   echo "   name   	(-n)   --- View or edit your gerrit username"
-   echo "   branch	(-nb)  --- Choose a new branch to push to"
-   echo "   push   	(-p)   --- Push to gerrit"
-   echo "   sshkey 	(-ssh) --- Create/show SSH key to put on Gerrit"
-   echo "   update 	(-u)   --- Check for, and download an update if one is available"
-   echo " "
-   echo "If you encounter problems, check if:"
-   echo "   1. Your gerrit username is correct (using the name option)"
-   echo "   2. Your current branch is correct"
-   echo "   3. Your public ssh key is attached to your gerrit profile"
-   echo " "
-   echo "If you still encounter problems, ask on the official PAC-man forum at:"
-   echo "http://forum.gerritpush-rom.com . . . . Press Control + Click to open URL"
-   echo " "
 
+install() {
+echo ""
+echo "###################################################################"
+echo "#                      Universal Gerrit Push                      #"
+echo "#                                                                 #"
+echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
+echo "#                                                                 #"
+echo "#                                                                 #"
+echo "###################################################################"
+echo ""
+	set_up_user
+	team
+	branch
 }
 
 
+error() {
+	echo " "
+	echo "Usage: universal-review [-short command]"
+	echo "Or:    universal-review [long command]"
+	echo " "
+	echo ""
+	echo "###################################################################"
+	echo ""
+	echo "                            COMMANDS:"
+	echo ""
+	echo "   install	(-in)   --- Intital Setup"
+	echo "   team 	(-nt)   --- Change Team Gerrits"
+	echo "   add+push	(-ap)  --- Add and push to gerrit"
+	echo "   amend  	(-am)  --- Amend the commit and push"
+	echo "   author	(-au)  --- Change author of commit"
+	echo "   force	(-uf)  --- Force the script to grab a new version"
+	echo "   name	(-n)   --- View or edit your gerrit username"
+	echo "   branch	(-nb)  --- Choose a new branch to push to"
+	echo "   push   	(-p)   --- Push to gerrit"
+	echo "   sshkey 	(-ssh) --- Create/show SSH key to put on Gerrit"
+	echo "   update 	(-u)   --- Check for, and download an update if one is available"
+	echo " "
+	echo "If you encounter problems, check if:"
+	echo "   1. Your gerrit username is correct (using the name option)"
+	echo "   2. Your current branch is correct"
+	echo "   3. Your public ssh key is attached to your gerrit profile"
+	echo " "
+	echo "If you still encounter problems, ask on the official PAC-man forum at:"
+	echo "http://forum.pac-rom.com . . . . Press Control + Click to open URL"
+	echo " "
+
+}
+
+echo ""
+echo "###################################################################"
+echo "#                      Universal Gerrit Push                      #"
+echo "#                                                                 #"
+echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
+echo "#                                                                 #"
+echo "#                                                                 #"
+echo "###################################################################"
+echo ""
+echo ""
+echo "###################################################################"
+echo ""
+
 if [ ! -d ${HOME}/bin ]; then
- mkdir -p ${HOME}/bin
- echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
- echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
+	mkdir -p ${HOME}/bin
+	echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
+	echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
 fi
 
-set_up_user
+if [ -f ${HOME}/.gerritpush/username ]; then
+	DisplayUser=`cat ${HOME}/.gerritpush/username`
+	echo "Your gerrit username is: ${DisplayUser}"
+fi
+
+if [ -f ${HOME}/.gerritpush/team ]; then
+	DisplayChoice=`cat ${HOME}/.gerritpush/teamchoice`
+	echo "Your gerrit team is set to: ${DisplayChoice}"
+fi
+
+if [ -f ${HOME}/.gerritpush/branch ]; then
+	DisplayBranch=`cat ${HOME}/.gerritpush/branch`
+	echo "Your current branch is set to: ${DisplayBranch}"
+fi
+echo ""
+echo "###################################################################"
 
 case $1 in
    -n|name)name;;
    -nb|branch)new_branch;;
    -u|update)update;;
    -p|push)push;;
+   -nt|team)new_team;;
+   -in|install)install;;
    -ssh|sshkey)sshkey;;
    -ap|add+push)ap;;
    -am|amend)amend;;
