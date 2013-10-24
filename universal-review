@@ -53,22 +53,24 @@ new_team() {
 		echo "Enter the Corresponding Number"
 		select NUMBER in "AOKP" "Carbon" "Chameleon-OS" "CyanogenMod" "Dirty-Unicorns" "Gummy" "Omni" "Paranoid-Android" "PAC" "Vanir";do
 		case ${NUMBER} in
-			1|AOKP ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
-			2|Carbon ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
-			3|Chameleon-OS ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
-			4|CyanogenMod ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
-			5|Dirty-Unicorns ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
-			6|Gummy ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
-			7|Omni ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
-			8|Paranoid-Android ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
-			9|PAC ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
-			10|Vanir ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
+			AOKP ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
+			Carbon ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
+			Chameleon-OS ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
+			CyanogenMod ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
+			Dirty-Unicorns ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
+			Gummy ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
+			Omni ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
+			Paranoid-Android ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
+			PAC ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
+			Vanir ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
 			* ) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
 		esac
 		done
 	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
 	mkdir -p ${HOME}/.gerritpush; echo ${CHOICE} > ${HOME}/.gerritpush/teamCHOICE;
 	echo "Default Set to ${CHOICE}"
+	rm ${HOME}/.gerritpush/branch
+	new_branch
 }
 
 
@@ -308,25 +310,20 @@ echo "Enter 1 for Yes and 2 for No"
 
 
 nameq_question() {
+echo "Enter an option:"
+echo "   1. View your current gerrit username"
+echo "   2. Enter a new gerrit username"
   select NAME in "View" "New"; do
    case ${NAME} in
-      View ) if [ -f ${HOME}/.gerritpush/username ]; then
+       View ) if [ -f ${HOME}/.gerritpush/username ]; then
            echo "Your current gerrit username is: ${GUZER}";
 	  else
 	   echo "No gerrit username found..";
 	  fi; break;;
       New ) echo -n "Enter your new gerrit username: "; read GUZER; correct_gname; break;;
-      * ) clear; echo "${NAME} is not a valid option (Choose 1 or 2)"; nameq_question; break;;
+      * ) echo "${NAME} is not a valid option (Choose 1 or 2)"; nameq_question; break;;
    esac
   done
-}
-
-
-name() {
-   echo "Enter an option:"
-   echo "   1. View your current gerrit username"
-   echo "   2. Enter a new gerrit username"
-   echo; nameq_question
 }
 
 
@@ -474,7 +471,7 @@ echo ""
 echo "###################################################################"
 
 case $1 in
-   -n|name)name;;
+   -n|name)nameq_question;;
    -nb|branch)new_branch;;
    -u|update)update;;
    -p|push)push;;
