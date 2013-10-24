@@ -13,15 +13,16 @@ set_up_user(){
 if [ -f ${HOME}/.gerritpush/username ]; then
    GUZER=`cat ${HOME}/.gerritpush/username`
 else
-   echo -n "Please enter your Gerrit UserName: "; read GUZER
+   clear
+   echo -n "Please enter your Gerrit UserName: "; read GUZER; clear
    echo "Your entered ${GUZER} is this correct"
    echo "Enter 1 for Yes or 2 for No"
    select correct1 in "Yes" "No"; do
    case ${correct1} in
         Yes ) mkdir -p ${HOME}/.gerritpush;
               echo ${GUZER} > ${HOME}/.gerritpush/username;
-              echo "Your new gerrit username is: ${GUZER}"; break;;
-        No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
+              clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
+        No ) clear; echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
         *) clear; echo "Invalid Entry ${correct1}, Please enter a number between [1 - 2]"; echo; set_up_user; break;;
    esac
  done
@@ -68,8 +69,8 @@ new_team() {
 		done
 	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
 	mkdir -p ${HOME}/.gerritpush; echo ${CHOICE} > ${HOME}/.gerritpush/teamCHOICE;
-	echo "Default Set to ${CHOICE}"
-	rm ${HOME}/.gerritpush/branch
+	clear; echo "Default Set to ${CHOICE}"; echo
+	rm ${HOME}/.gerritpush/branch > /dev/null 2>&1
 	new_branch
 }
 
@@ -176,10 +177,10 @@ new_branch() {
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
-		select correct3 in "CM-10.1" "CM-10.2" "GH-PAGES"; do
+		select correct3 in "jellybean" "jb43" "GH-PAGES"; do
 		case ${correct3} in
-			CM-10.1 ) BRANCH="cm-10.1"; break;;
-			CM-10.2 ) BRANCH="cm-10.2"; break;;
+			jellybean ) BRANCH="jellybean"; break;;
+			jb43 ) BRANCH="jb43"; break;;
 			GH-PAGES ) BRANCH="gh-pages"; break;;
 			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
 		esac
@@ -214,7 +215,7 @@ new_branch() {
 		esac
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
+		clear; echo "Your new current branch is: ${BRANCH}"
 fi
 }
 
@@ -413,48 +414,53 @@ echo ""
 echo ""
 echo "###################################################################"
 echo ""
-	echo " "
+	echo
 	echo "Usage: universal-review [-short command]"
 	echo "Or:    universal-review [long command]"
-	echo " "
-	echo ""
+	echo
+	echo
 	echo "###################################################################"
-	echo ""
-	echo "                            COMMANDS:"
-	echo ""
-	echo "   install	(-in)   --- Intital Setup"
-	echo "   team 	(-nt)   --- Change Team Gerrits"
+	echo
+	echo "                COMMANDS:"
+	echo
+	echo "   install	(-in)  --- Intital Setup"
+	echo "   team 	(-nt)  --- Change Team Gerrits"
 	echo "   add+push	(-ap)  --- Add and push to gerrit"
 	echo "   amend  	(-am)  --- Amend the commit and push"
 	echo "   author	(-au)  --- Change author of commit"
 	echo "   force	(-uf)  --- Force the script to grab a new version"
-	echo "   name	(-n)   --- View or edit your gerrit username"
+	echo "   name         (-n)   --- View or edit your gerrit username"
 	echo "   branch	(-nb)  --- Choose a new branch to push to"
 	echo "   push   	(-p)   --- Push to gerrit"
 	echo "   sshkey 	(-ssh) --- Create/show SSH key to put on Gerrit"
 	echo "   update 	(-u)   --- Check for, and download an update if one is available"
-	echo " "
+	echo
+	echo "###################################################################"
+	echo
 	echo "If you encounter problems, check if:"
 	echo "   1. Your gerrit username is correct (using the name option)"
 	echo "   2. Your current branch is correct"
 	echo "   3. Your public ssh key is attached to your gerrit profile"
-	echo " "
+	echo
 	echo "If you still encounter problems, ask on the official PAC-man forum at:"
 	echo "http://forum.pac-rom.com . . . . Press Control + Click to open URL"
-	echo " "
+	echo
 
 }
 
 install
+clear
 
 if [ ! -d ${HOME}/bin ]; then
 	mkdir -p ${HOME}/bin
-	DisplayUser=`cat ${HOME}/.gerritpush/username`
 	echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
 	echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
 fi
 
+echo "###################################################################"
+
 if [ -f ${HOME}/.gerritpush/username ]; then
+	DisplayUser=`cat ${HOME}/.gerritpush/username`
 	echo "Your gerrit username is: ${DisplayUser}"
 fi
 
@@ -467,8 +473,7 @@ if [ -f ${HOME}/.gerritpush/branch ]; then
 	DisplayBranch=`cat ${HOME}/.gerritpush/branch`
 	echo "Your current branch is set to: ${DisplayBranch}"
 fi
-echo ""
-echo "###################################################################"
+sleep 4; echo
 
 case $1 in
    -n|name)nameq_question;;
