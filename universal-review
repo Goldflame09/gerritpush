@@ -31,7 +31,7 @@ fi
 team() {
 	if [ -f ${HOME}/.gerritpush/team ]; then
 		GTEAM=`cat ${HOME}/.gerritpush/team`
-		Choice=`cat ${HOME}/.gerritpush/teamchoice`
+		CHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
 	else
 		new_team
 	fi
@@ -40,7 +40,7 @@ team() {
 
 new_team() {
 		if [ -f ${HOME}/.gerritpush/team ]; then
-			DisplayTeam=`cat ${HOME}/.gerritpush/teamchoice`
+			DisplayTeam=`cat ${HOME}/.gerritpush/teamCHOICE`
 			echo ""
 			echo "###################################################################"
 			echo ""
@@ -51,24 +51,24 @@ new_team() {
 		fi
 		echo "Please Select your new Gerrit Team:"
 		echo "Enter the Corresponding Number"
-		select NUMBER in "AOKP" "Carbon" "Chameleon OS" "CyanogenMod" "Dirty Unicorns" "Gummy" "Omni" "Paranoid Android" "PAC" "Vanir";do
+		select NUMBER in "AOKP" "Carbon" "Chameleon-OS" "CyanogenMod" "Dirty-Unicorns" "Gummy" "Omni" "Paranoid-Android" "PAC" "Vanir";do
 		case ${NUMBER} in
-			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
-			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
-			3 ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
-			4 ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
-			5 ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
-			6 ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
-			7 ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
-			8 ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
-			9 ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
-			10 ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
-			* ) echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; team; break;;
+			1|AOKP ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
+			2|Carbon ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
+			3|Chameleon-OS ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
+			4|CyanogenMod ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
+			5|Dirty-Unicorns ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
+			6|Gummy ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
+			7|Omni ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
+			8|Paranoid-Android ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
+			9|PAC ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
+			10|Vanir ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
+			* ) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
 		esac
 		done
 	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
-	mkdir -p ${HOME}/.gerritpush; echo ${Choice} > ${HOME}/.gerritpush/teamchoice;
-	echo "Default Set to ${Choice}"
+	mkdir -p ${HOME}/.gerritpush; echo ${CHOICE} > ${HOME}/.gerritpush/teamCHOICE;
+	echo "Default Set to ${CHOICE}"
 }
 
 
@@ -93,7 +93,7 @@ new_branch() {
 		echo ""
 	fi
 	team
-	if [ "${Choice}" == "AOKP" ]; then
+	if [ "${CHOICE}" == "AOKP" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for SwagPapers!!"
@@ -107,7 +107,7 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Carbon" ]; then
+	elif [ "${CHOICE}" == "Carbon" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -120,7 +120,7 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Chameleon" ]; then
+	elif [ "${CHOICE}" == "Chameleon" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		select correct3 in "jellybean-mr1" "jellybean-mr2.1"; do
@@ -132,7 +132,7 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "CyanogenMod" ]; then
+	elif [ "${CHOICE}" == "CyanogenMod" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		select correct3 in "CM-10.1" "CM-10.2"; do
@@ -144,7 +144,7 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Dirty-Unicorns" ]; then
+	elif [ "${CHOICE}" == "Dirty-Unicorns" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES & du43is ONLY for DirtWalls!!"
@@ -159,18 +159,18 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Gummy" ]; then
+	elif [ "${CHOICE}" == "Gummy" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		BRANCH="jb4.3"
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		BRANCH=`cat ${HOME}/.gerritpush/branch`
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Omni" ]; then
+	elif [ "${CHOICE}" == "Omni" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		BRANCH="android-4.3"
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Paranoid-Android" ]; then
+	elif [ "${CHOICE}" == "Paranoid-Android" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -184,7 +184,7 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "PAC" ]; then
+	elif [ "${CHOICE}" == "PAC" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -198,7 +198,7 @@ new_branch() {
 		done
 		echo ${BRANCH} > ${HOME}/.gerritpush/branch
 		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${Choice}" == "Vanir" ]; then
+	elif [ "${CHOICE}" == "Vanir" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
 		echo "GH-PAGES is ONLY for PacPapers!!"
@@ -333,7 +333,7 @@ name() {
 sshkey() {
 team
 echo ""
-echo "Your gerrit team is set to: ${Choice}"
+echo "Your gerrit team is set to: ${CHOICE}"
 echo ""
 echo "You will have to set this up for every Team's Gerrit"
 echo "But can use the same sshkeys for all"
@@ -341,7 +341,7 @@ echo ""
 if [ -e ${HOME}/.ssh/id_rsa.pub ]; then
    echo "SSH Key already exists.
 
-Go to ${Choice} Gerrit (${GTEAM}), sign in, go to settings, 
+Go to ${CHOICE} Gerrit (${GTEAM}), sign in, go to settings, 
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -349,7 +349,7 @@ read -p "Press [Enter] to open file..."
    gnome-open ${HOME}/.ssh/id_rsa.pub
 else
    ssh-keygen
-   echo "Go to ${Choice} Gerrit (${GTEAM}), sign in, go to settings, 
+   echo "Go to ${CHOICE} Gerrit (${GTEAM}), sign in, go to settings, 
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -462,8 +462,8 @@ if [ -f ${HOME}/.gerritpush/username ]; then
 fi
 
 if [ -f ${HOME}/.gerritpush/team ]; then
-	DisplayChoice=`cat ${HOME}/.gerritpush/teamchoice`
-	echo "Your gerrit team is set to: ${DisplayChoice}"
+	DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
+	echo "Your gerrit team is set to: ${DisplayCHOICE}"
 fi
 
 if [ -f ${HOME}/.gerritpush/branch ]; then
