@@ -51,17 +51,7 @@ new_team() {
 		fi
 		echo "Please Select your new Gerrit Team:"
 		echo "Enter the Corresponding Number"
-		echo "1. AOKP"
-		echo "2. Carbon"
-		echo "3. Chameleon OS"
-		echo "4. CyanogenMod"
-		echo "5. Dirty Unicorns"
-		echo "6. Gummy"
-		echo "7. Omni"
-		echo "8. Paranoid Android"
-		echo "9. PAC"
-		echo "10. Vanir"
-		select NUMBER in "1" "2" "3" "4" "5" "6" "7" "8" "9" "10";do
+		select NUMBER in "1. AOKP" "2. Carbon" "3. Chameleon OS" "4. CyanogenMod" "5. Dirty Unicorns" "6. Gummy" "7. Omni" "8. Paranoid Android" "9. PAC" "10. Vanir";do
 		case ${NUMBER} in
 			1 ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
 			2 ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
@@ -71,9 +61,9 @@ new_team() {
 			6 ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
 			7 ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
 			8 ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
-			9 ) CHOICE="Pac"; GTEAM="review.pac-rom.com" ; break;;
+			9 ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
 			10 ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; team; break;;
+			* ) echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; team; break;;
 		esac
 		done
 	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
@@ -414,6 +404,18 @@ install() {
 
 
 error() {
+echo ""
+echo "###################################################################"
+echo "#                      Universal Gerrit Push                      #"
+echo "#                                                                 #"
+echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
+echo "#                                                                 #"
+echo "#                                                                 #"
+echo "###################################################################"
+echo ""
+echo ""
+echo "###################################################################"
+echo ""
 	echo " "
 	echo "Usage: universal-review [-short command]"
 	echo "Or:    universal-review [long command]"
@@ -446,29 +448,16 @@ error() {
 
 }
 
-echo ""
-echo "###################################################################"
-echo "#                      Universal Gerrit Push                      #"
-echo "#                                                                 #"
-echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
-echo "#                                                                 #"
-echo "#                                                                 #"
-echo "###################################################################"
-echo ""
-echo ""
-echo "###################################################################"
-echo ""
-
 install
 
 if [ ! -d ${HOME}/bin ]; then
 	mkdir -p ${HOME}/bin
+	DisplayUser=`cat ${HOME}/.gerritpush/username`
 	echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
 	echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
 fi
 
 if [ -f ${HOME}/.gerritpush/username ]; then
-	DisplayUser=`cat ${HOME}/.gerritpush/username`
 	echo "Your gerrit username is: ${DisplayUser}"
 fi
 
