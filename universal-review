@@ -96,7 +96,7 @@ new_branch() {
 	if [ "${Choice}" == "AOKP" ]; then
 		rm -f ${HOME}/.gerritpush/branch
 		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES is ONLY for PacPapers!!"
+		echo "GH-PAGES is ONLY for SwagPapers!!"
 		select correct3 in "jb-mr2" "jb-mr1" "GH-PAGES"; do
 		case ${correct3} in
 			jb-mr2 ) BRANCH="jb-mr2"; break;;
