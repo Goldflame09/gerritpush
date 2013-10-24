@@ -407,15 +407,6 @@ uf() {
 
 
 install() {
-echo ""
-echo "###################################################################"
-echo "#                      Universal Gerrit Push                      #"
-echo "#                                                                 #"
-echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
-echo "#                                                                 #"
-echo "#                                                                 #"
-echo "###################################################################"
-echo ""
 	set_up_user
 	team
 	branch
