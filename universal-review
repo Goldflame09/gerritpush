@@ -54,21 +54,22 @@ new_team() {
 		echo "Enter the Corresponding Number"
 		select NUMBER in "AOKP" "Carbon" "Chameleon-OS" "CyanogenMod" "Dirty-Unicorns" "Gummy" "Omni" "Paranoid-Android" "PAC" "Vanir";do
 		case ${NUMBER} in
-			AOKP ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co" ; break;;
-			Carbon ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com" ; break;;
-			Chameleon-OS ) CHOICE="Chameleon"; GTEAM="review.chameleonos.org" ; break;;
-			CyanogenMod ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org" ; break;;
+			AOKP ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co"; NPROJ="AOKP" ; break;;
+			Carbon ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com"; NPROJ="CarbonDev" ; break;;
+			Chameleon-OS ) CHOICE="Chameleon-OS"; GTEAM="review.chameleonos.org"; NPROJ="ChameleonOS" ; break;;
+			CyanogenMod ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org"; NPROJ="CyanogenMod" ; break;;
 			Dirty-Unicorns ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
-			Gummy ) CHOICE="Gummy"; GTEAM="review.gummyrom.com" ; break;;
+			Gummy ) CHOICE="Gummy"; GTEAM="review.gummyrom.com"; NPROJ="TEAM-Gummy" ; break;;
 			Omni ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
-			Paranoid-Android ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co" ; break;;
+			Paranoid-Android ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co"; NPROJ="ParanoidAndroid" break;;
 			PAC ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
-			Vanir ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" ; break;;
+			Vanir ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" break;;
 			* ) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
 		esac
 		done
 	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
 	mkdir -p ${HOME}/.gerritpush; echo ${CHOICE} > ${HOME}/.gerritpush/teamCHOICE;
+	mkdir -p ${HOME}/.gerritpush; echo ${NPROJ} > ${HOME}/.gerritpush/projectNAME;
 	clear; echo "Default Set to ${CHOICE}"; echo
 	rm ${HOME}/.gerritpush/branch > /dev/null 2>&1
 	new_branch
@@ -248,8 +249,13 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 	else
 	  new_branch
 	fi
-    PROJECT=`grep PAC-man .git/config | awk -F/ '{print $NF}'`
+  if [ -f ${HOME}/.gerritpush/projectNAME ]; then
+    PROJECT=`cat .git/config | awk -F"github.com/" '{print $2}' | awk -F".git" '{print $1}' | awk -F"PAC-man/" '{print $3}' `
+    git push ssh://${GUZER}@${GTEAM}:29418/${NPROJ}/${PROJECT} HEAD:refs/\for/${BRANCH}
+  else
+    PROJECT=`grep ${PROJ} .git/config | awk -F"github.com/" '{print $2}' | awk -F".git" '{print $1}' `
     git push ssh://${GUZER}@${GTEAM}:29418/${PROJECT} HEAD:refs/\for/${BRANCH}
+  fi
 else
   echo "Canceled"
 fi
@@ -402,6 +408,24 @@ install() {
 
 
 error() {
+echo "###################################################################"
+
+if [ -f ${HOME}/.gerritpush/username ]; then
+	DisplayUser=`cat ${HOME}/.gerritpush/username`
+	echo "Your gerrit username is: ${DisplayUser}"
+fi
+
+if [ -f ${HOME}/.gerritpush/team ]; then
+	DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
+	echo "Your gerrit team is set to: ${DisplayCHOICE}"
+fi
+
+if [ -f ${HOME}/.gerritpush/branch ]; then
+	DisplayBranch=`cat ${HOME}/.gerritpush/branch`
+	echo "Your current branch is set to: ${DisplayBranch}"
+fi
+echo "###################################################################"
+sleep 4; echo
 echo ""
 echo "###################################################################"
 echo "#                      Universal Gerrit Push                      #"
@@ -457,23 +481,6 @@ if [ ! -d ${HOME}/bin ]; then
 	echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
 fi
 
-echo "###################################################################"
-
-if [ -f ${HOME}/.gerritpush/username ]; then
-	DisplayUser=`cat ${HOME}/.gerritpush/username`
-	echo "Your gerrit username is: ${DisplayUser}"
-fi
-
-if [ -f ${HOME}/.gerritpush/team ]; then
-	DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
-	echo "Your gerrit team is set to: ${DisplayCHOICE}"
-fi
-
-if [ -f ${HOME}/.gerritpush/branch ]; then
-	DisplayBranch=`cat ${HOME}/.gerritpush/branch`
-	echo "Your current branch is set to: ${DisplayBranch}"
-fi
-sleep 4; echo
 
 case $1 in
    -n|name)nameq_question;;
