@@ -67,6 +67,9 @@ new_team() {
 			* ) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
 		esac
 		done
+	rm -f ${HOME}/.gerritpush/team
+	rm -f ${HOME}/.gerritpush/teamCHOICE
+	rm -f ${HOME}/.gerritpush/projectNAME
 	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
 	mkdir -p ${HOME}/.gerritpush; echo ${CHOICE} > ${HOME}/.gerritpush/teamCHOICE;
 	mkdir -p ${HOME}/.gerritpush; echo ${NPROJ} > ${HOME}/.gerritpush/projectNAME;
@@ -249,11 +252,12 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 	else
 	  new_branch
 	fi
-  if [ -f ${HOME}/.gerritpush/projectNAME ]; then
-    PROJECT=`cat .git/config | awk -F"github.com/" '{print $2}' | awk -F".git" '{print $1}' | awk -F"PAC-man/" '{print $3}' `
-    git push ssh://${GUZER}@${GTEAM}:29418/${NPROJ}/${PROJECT} HEAD:refs/\for/${BRANCH}
+if [ -f ${HOME}/.gerritpush/project1 ]; then
+PROJECT1=`cat ${HOME}/.gerritpush/projectNAME`
+   PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
+   git push ssh://${GUZER}@${GTEAM}:29418/${PROJECT1}/${PROJECT} HEAD:refs/\for/${BRANCH}
   else
-    PROJECT=`grep ${PROJ} .git/config | awk -F"github.com/" '{print $2}' | awk -F".git" '{print $1}' `
+    PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
     git push ssh://${GUZER}@${GTEAM}:29418/${PROJECT} HEAD:refs/\for/${BRANCH}
   fi
 else
