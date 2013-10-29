@@ -157,7 +157,7 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
                         GUZER=`cat ${HOME}/.gerritpush/username`
 						GTEAM=`cat ${HOME}/.gerritpush/team`
 						BRANCH=`cat ${HOME}/.gerritpush/branch`
-                        GURl=`cat ${HOME}/.gerritpush/gerritURL`
+                        GURL=`cat ${HOME}/.gerritpush/gerritURL`
 						PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
                         git push ssh://${GUZER}@${GTEAM}:29418/${GURL}${PROJECT}HEAD:refs/\for/${BRANCH}
                   else
