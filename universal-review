@@ -12,7 +12,6 @@ BUILD=1
 # Variable matrix
 TEAM=("AOKP" "Carbon" "Chameleon-OS" "CyanogenMod" "Dirty-Unicorns" "Gummy" "Omni" "Paraniod-Android" "PAC" "Vanir")
 GTEAM=("gerrit.aokp.co" "review.carbon-rom.com" "review.chameleonos.org" "review.cyanogenmod.org" "gerrit.dirtyunicorns.com" "review.gummyrom.com" "gerrit.omnirom.org" "gerrit.paranoidandroid.co" "review.pac-rom.com" "vaniraosp.goo.im")
-NPROJ=("AOKP" "CarbonDev" "ChameleonOS" "CyanogenMod" "" "TEAM-Gummy" "" "ParanoidAndroid" "" "") # <--Not really sure if this array is even needed anymore
 BRANCH1=("jb-mr2" "jb3" "jellybean-mr1" "cm-10.1" "jb-mr2" "jb4.3" "android-4.3" "jellybean" "cm-10.1" "jb")
 BRANCH2=("jb-mr1" "jb2" "jellybean-mr2.1" "cm-10.2" "jb-mr1" "" "" "jb43" "cm-10.2" "jb42")
 BRANCH3=("gh-pages" "" "" "" "du43" "" "" "gh-pages" "gh-pages" "jb42-master")
@@ -43,6 +42,9 @@ team() {
         if [ -f ${HOME}/.gerritpush/team ]; then
                 GTEAM=`cat ${HOME}/.gerritpush/team`
                 TEAM=`cat ${HOME}/.gerritpush/teamCHOICE`
+				if [ -f ${HOME}/.gerritpush/gerritURL ]; then
+					GURL=`cat ${HOME}/.gerritpush/gerritURL
+				fi
         else
                 new_team
         fi
@@ -83,7 +85,6 @@ new_team() {
         rm -f ${HOME}/.gerritpush/gerritURL
         mkdir -p ${HOME}/.gerritpush; echo ${GTEAM[$i]} > ${HOME}/.gerritpush/team;
         mkdir -p ${HOME}/.gerritpush; echo ${TEAM[$i]} > ${HOME}/.gerritpush/teamCHOICE;
-        mkdir -p ${HOME}/.gerritpush; echo ${NPROJ[$i]} > ${HOME}/.gerritpush/projectNAME;
         mkdir -p ${HOME}/.gerritpush; echo ${URL[$i]} > ${HOME}/.gerritpush/gerritURL;
         clear; echo "Default Set to ${TEAM}"; echo
         rm ${HOME}/.gerritpush/branch > /dev/null 2>&1
@@ -114,7 +115,7 @@ new_branch() {
         team
         rm -f ${HOME}/.gerritpush/branch
 	echo "Please enter the branch you want to upload to:"
-	echo "GH-PAGES is ONLY for SwagPapers!!"
+	echo "GH-PAGES is ONLY for SwagPapers, PacPapers, or DirtWalls!!"
 
 	select BRANCH in "${BRANCH1[$i]}" "${BRANCH2[$i]}" "${BRANCH3[$i]}" "${BRANCH4[$i]}"; do
         	if [ -z $(echo "$BRANCH") ]; then 
@@ -337,11 +338,11 @@ echo "###################################################################"
 sleep 4; echo
 echo ""
 echo "###################################################################"
-echo "# Universal Gerrit Push #"
-echo "# #"
-echo "# Created by Sniper/Goldflame09/wedgess/Papa Smurf151 #"
-echo "# #"
-echo "# #"
+echo "#                      Universal Gerrit Push                      #"
+echo "#                                                                 #"
+echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
+echo "#                                                                 #"
+echo "#                                                                 #"
 echo "###################################################################"
 echo ""
 echo ""
