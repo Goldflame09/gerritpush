@@ -1,13 +1,23 @@
 #!/bin/bash
 
 ###################################################################
-#                                                                 #
+# #
 # Created by Sniper/Goldflame09/wedgess/Papa Smurf151 for PAC-man #
-#                                                                 #
+# #
 ###################################################################
 
 VERSION=1.0
 BUILD=1
+
+# Variable matrix
+TEAM=("AOKP" "Carbon" "Chameleon-OS" "CyanogenMod" "Dirty-Unicorns" "Gummy" "Omni" "Paraniod-Android" "PAC" "Vanir")
+GTEAM=("gerrit.aokp.co" "review.carbon-rom.com" "review.chameleonos.org" "review.cyanogenmod.org" "gerrit.dirtyunicorns.com" "review.gummyrom.com" "gerrit.omnirom.org" "gerrit.paranoidandroid.co" "review.pac-rom.com" "vaniraosp.goo.im")
+NPROJ=("AOKP" "CarbonDev" "ChameleonOS" "CyanogenMod" "" "TEAM-Gummy" "" "ParanoidAndroid" "" "") # <--Not really sure if this array is even needed anymore
+BRANCH1=("jb-mr2" "jb3" "jellybean-mr1" "cm-10.1" "jb-mr2" "jb4.3" "android-4.3" "jellybean" "cm-10.1" "jb")
+BRANCH2=("jb-mr1" "jb2" "jellybean-mr2.1" "cm-10.2" "jb-mr1" "" "" "jb43" "cm-10.2" "jb42")
+BRANCH3=("gh-pages" "" "" "" "du43" "" "" "gh-pages" "gh-pages" "jb42-master")
+BRANCH4=("" "" "" "" "gh-pages" "" "" "" "" "jb43")
+URL=("AOKP/android_etc" "CarbonDev/android_etc" "ChameleonOS/android_etc" "CyanogenMod/android_etc" "android_etc" "TEAM-Gummy/android_etc" "android_etc" "ParanoidAndroid/android_etc" "android_etc" "android_etc") # <--This is just a best guess as to what the correct URLs are.  May need editing
 
 set_up_user(){
 if [ -f ${HOME}/.gerritpush/username ]; then
@@ -30,197 +40,95 @@ fi
 }
 
 team() {
-	if [ -f ${HOME}/.gerritpush/team ]; then
-		GTEAM=`cat ${HOME}/.gerritpush/team`
-		CHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
-	else
-		new_team
-	fi
+        if [ -f ${HOME}/.gerritpush/team ]; then
+                GTEAM=`cat ${HOME}/.gerritpush/team`
+                TEAM=`cat ${HOME}/.gerritpush/teamCHOICE`
+        else
+                new_team
+        fi
 }
 
 
 new_team() {
-		if [ -f ${HOME}/.gerritpush/team ]; then
-			DisplayTeam=`cat ${HOME}/.gerritpush/teamCHOICE`
-			echo ""
-			echo "###################################################################"
-			echo ""
-			echo "Your gerrit team is set to: ${DisplayTeam}"
-			echo ""
-			echo "###################################################################"
-			echo ""
-		fi
-		echo "Please Select your new Gerrit Team:"
-		echo "Enter the Corresponding Number"
-		select NUMBER in "AOKP" "Carbon" "Chameleon-OS" "CyanogenMod" "Dirty-Unicorns" "Gummy" "Omni" "Paranoid-Android" "PAC" "Vanir";do
-		case ${NUMBER} in
-			AOKP ) CHOICE="AOKP"; GTEAM="gerrit.aokp.co"; NPROJ="AOKP" ; break;;
-			Carbon ) CHOICE="Carbon"; GTEAM="review.carbon-rom.com"; NPROJ="CarbonDev" ; break;;
-			Chameleon-OS ) CHOICE="Chameleon-OS"; GTEAM="review.chameleonos.org"; NPROJ="ChameleonOS" ; break;;
-			CyanogenMod ) CHOICE="CyanogenMod"; GTEAM="review.cyanogenmod.org"; NPROJ="CyanogenMod" ; break;;
-			Dirty-Unicorns ) CHOICE="Dirty-Unicorns"; GTEAM="gerrit.dirtyunicorns.com" ; break;;
-			Gummy ) CHOICE="Gummy"; GTEAM="review.gummyrom.com"; NPROJ="TEAM-Gummy" ; break;;
-			Omni ) CHOICE="Omni"; GTEAM="gerrit.omnirom.org" ; break;;
-			Paranoid-Android ) CHOICE="Paranoid-Android"; GTEAM="gerrit.paranoidandroid.co"; NPROJ="ParanoidAndroid" break;;
-			PAC ) CHOICE="PAC"; GTEAM="review.pac-rom.com" ; break;;
-			Vanir ) CHOICE="Vanir"; GTEAM="vaniraosp.goo.im" break;;
-			* ) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
-		esac
-		done
-	rm -f ${HOME}/.gerritpush/team
-	rm -f ${HOME}/.gerritpush/teamCHOICE
-	rm -f ${HOME}/.gerritpush/projectNAME
-	mkdir -p ${HOME}/.gerritpush; echo ${GTEAM} > ${HOME}/.gerritpush/team;
-	mkdir -p ${HOME}/.gerritpush; echo ${CHOICE} > ${HOME}/.gerritpush/teamCHOICE;
-	mkdir -p ${HOME}/.gerritpush; echo ${NPROJ} > ${HOME}/.gerritpush/projectNAME;
-	clear; echo "Default Set to ${CHOICE}"; echo
-	rm ${HOME}/.gerritpush/branch > /dev/null 2>&1
-	new_branch
+                if [ -f ${HOME}/.gerritpush/team ]; then
+                        DisplayTeam=`cat ${HOME}/.gerritpush/teamCHOICE`
+                        echo ""
+                        echo "###################################################################"
+                        echo ""
+                        echo "Your gerrit team is set to: ${DisplayTeam}"
+                        echo ""
+                        echo "###################################################################"
+                        echo ""
+                fi
+                echo "Please Select your new Gerrit Team:"
+                echo "Enter the Corresponding Number"
+                select NUMBER in $(echo ${TEAM[@]}); do
+                	case ${NUMBER} in
+				AOKP) i=0; break;;
+                        	Carbon) i=1; break;;
+                        	Chameleon-OS) i=2; break;;
+                        	CyanogenMod) i=3; break;;
+                        	Dirty-Unicorns) i=4; break;;
+                        	Gummy) i=5; break;;
+                        	Omni) i=6; break;;
+                        	Paranoid-Android) i=7; break;;
+                        	PAC) i=8; break;;
+                        	Vanir) i=9; break;;
+                        	*) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
+                	esac
+                done
+        rm -f ${HOME}/.gerritpush/team
+        rm -f ${HOME}/.gerritpush/teamCHOICE
+        rm -f ${HOME}/.gerritpush/projectNAME
+        rm -f ${HOME}/.gerritpush/gerritURL
+        mkdir -p ${HOME}/.gerritpush; echo ${GTEAM[$i]} > ${HOME}/.gerritpush/team;
+        mkdir -p ${HOME}/.gerritpush; echo ${TEAM[$i]} > ${HOME}/.gerritpush/teamCHOICE;
+        mkdir -p ${HOME}/.gerritpush; echo ${NPROJ[$i]} > ${HOME}/.gerritpush/projectNAME;
+        mkdir -p ${HOME}/.gerritpush; echo ${URL[$i]} > ${HOME}/.gerritpush/gerritURL;
+        clear; echo "Default Set to ${TEAM}"; echo
+        rm ${HOME}/.gerritpush/branch > /dev/null 2>&1
+        new_branch
 }
 
 
 branch() {
-	if [ -f ${HOME}/.gerritpush/branch ]; then
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
-	else
-		new_branch
-	fi
+        if [ -f ${HOME}/.gerritpush/branch ]; then
+                BRANCH=`cat ${HOME}/.gerritpush/branch`
+        else
+                new_branch
+        fi
 }
 
 
 new_branch() {
-	if [ -f ${HOME}/.gerritpush/branch ]; then
-		DisplayBranch1=`cat ${HOME}/.gerritpush/branch`
-		echo ""
-		echo "###################################################################"
-		echo ""
-		echo "Your current branch is set to: ${DisplayBranch1}"
-		echo ""
-		echo "###################################################################"
-		echo ""
-	fi
-	team
-	if [ "${CHOICE}" == "AOKP" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES is ONLY for SwagPapers!!"
-		select correct3 in "jb-mr2" "jb-mr1" "GH-PAGES"; do
-		case ${correct3} in
-			jb-mr2 ) BRANCH="jb-mr2"; break;;
-			jb-mr1 ) BRANCH="jb-mr1"; break;;
-			GH-PAGES ) BRANCH="gh-pages"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Carbon" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES is ONLY for PacPapers!!"
-		select correct3 in "jb3" "jb2"; do
-		case ${correct3} in
-			jb3 ) BRANCH="jb3"; break;;
-			jb2 ) BRANCH="jb2"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Chameleon" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		select correct3 in "jellybean-mr1" "jellybean-mr2.1"; do
-		case ${correct3} in
-			jellybean-mr1 ) BRANCH="jellybean-mr1"; break;;
-			jellybean-mr2.1 ) BRANCH="jellybean-mr2.1"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "CyanogenMod" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		select correct3 in "CM-10.1" "CM-10.2"; do
-		case ${correct3} in
-			CM-10.1 ) BRANCH="cm-10.1"; break;;
-			CM-10.2 ) BRANCH="cm-10.2"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Dirty-Unicorns" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES & du43is ONLY for DirtWalls!!"
-		select correct3 in "jb-mr2" "jb-mr1" "du43" "GH-PAGES"; do
-		case ${correct3} in
-			jb-mr2 ) BRANCH="jb-mr2"; break;;
-			jb-mr1 ) BRANCH="jb-mr1"; break;;
-			du43 ) BRANCH="du43"; break;;
-			GH-PAGES ) BRANCH="gh-pages"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Gummy" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		BRANCH="jb4.3"
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		BRANCH=`cat ${HOME}/.gerritpush/branch`
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Omni" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		BRANCH="android-4.3"
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Paranoid-Android" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES is ONLY for PacPapers!!"
-		select correct3 in "jellybean" "jb43" "GH-PAGES"; do
-		case ${correct3} in
-			jellybean ) BRANCH="jellybean"; break;;
-			jb43 ) BRANCH="jb43"; break;;
-			GH-PAGES ) BRANCH="gh-pages"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "PAC" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES is ONLY for PacPapers!!"
-		select correct3 in "CM-10.1" "CM-10.2" "GH-PAGES"; do
-		case ${correct3} in
-			CM-10.1 ) BRANCH="cm-10.1"; break;;
-			CM-10.2 ) BRANCH="cm-10.2"; break;;
-			GH-PAGES ) BRANCH="gh-pages"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		echo "Your new current branch is: ${BRANCH}"
-	elif [ "${CHOICE}" == "Vanir" ]; then
-		rm -f ${HOME}/.gerritpush/branch
-		echo "Please enter the branch you want to upload to:"
-		echo "GH-PAGES is ONLY for PacPapers!!"
-		select correct3 in "jb" "jb42" "jb42-master" "jb43"; do
-		case ${correct3} in
-			jb ) BRANCH="jb"; break;;
-			jb42 ) BRANCH="jb42"; break;;
-			jb42-master ) BRANCH="jb42-master"; break;;
-			jb43 ) BRANCH="jb43"; break;;
-			* ) clear; echo "Invalid Entry ${correct3}, Please enter from the options provided."; echo; echo; new_branch; break;;
-		esac
-		done
-		echo ${BRANCH} > ${HOME}/.gerritpush/branch
-		clear; echo "Your new current branch is: ${BRANCH}"
-fi
+        if [ -f ${HOME}/.gerritpush/branch ]; then
+                DisplayBranch1=`cat ${HOME}/.gerritpush/branch`
+                echo ""
+                echo "###################################################################"
+                echo ""
+                echo "Your current branch is set to: ${DisplayBranch1}"
+                echo ""
+                echo "###################################################################"
+                echo ""
+        fi
+        team
+        rm -f ${HOME}/.gerritpush/branch
+	echo "Please enter the branch you want to upload to:"
+	echo "GH-PAGES is ONLY for SwagPapers!!"
+
+	select BRANCH in "${BRANCH1[$i]}" "${BRANCH2[$i]}" "${BRANCH3[$i]}" "${BRANCH4[$i]}"; do
+        	if [ -z $(echo "$BRANCH") ]; then 
+			echo "Invalid Entry"
+                        new_branch
+                        echo "" 
+                        echo ""
+		fi
+        	break
+	done
+        echo ${BRANCH} > ${HOME}/.gerritpush/branch
+	echo ""
+	echo "Your new current branch is: $BRANCH"
+	echo ""
 }
 
 
@@ -230,9 +138,9 @@ echo "Is this correct ??"
 echo "Enter 1 for Yes and 2 for No"
   select correct2 in "Yes" "No"; do
    case ${correct2} in
-	Yes ) echo "Commit set to ${MSSG}"; break;;
-	No ) echo "Re-enter commit message"; read MSSG; break;;
-	* ) clear; echo "Invalid Entry ${correct2}, Please re-try"; echo; echo; correct_commit; break ;;
+        Yes ) echo "Commit set to ${MSSG}"; break;;
+        No ) echo "Re-enter commit message"; read MSSG; break;;
+        * ) clear; echo "Invalid Entry ${correct2}, Please re-try"; echo; echo; correct_commit; break ;;
    esac
   done
 }
@@ -241,25 +149,19 @@ echo "Enter 1 for Yes and 2 for No"
 push() {
 echo -n "Are you sure you want to push? (y/n): "; read RESP
 if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
-	if [ -f ${HOME}/.gerritpush/branch ]; then
-  	  echo "Current branch: `cat ${HOME}/.gerritpush/branch`"
-  	  echo -n "Push to current branch? (y/n): "; read CTPUSH
-  		if [ "${CTPUSH}" == "y" ] || [ "${CTPUSH}" == "Y" ]; then
-			BRANCH=`cat ${HOME}/.gerritpush/branch`
-  		else
-			new_branch
-  		fi
-	else
-	  new_branch
-	fi
-if [ -f ${HOME}/.gerritpush/project1 ]; then
-PROJECT1=`cat ${HOME}/.gerritpush/projectNAME`
-   PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
-   git push ssh://${GUZER}@${GTEAM}:29418/${PROJECT1}/${PROJECT} HEAD:refs/\for/${BRANCH}
-  else
-    PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
-    git push ssh://${GUZER}@${GTEAM}:29418/${PROJECT} HEAD:refs/\for/${BRANCH}
-  fi
+        if [ -f ${HOME}/.gerritpush/branch ]; then
+           echo "Current branch: `cat ${HOME}/.gerritpush/branch`"
+           echo -n "Push to current branch? (y/n): "; read CTPUSH
+                  if [ "${CTPUSH}" == "y" ] || [ "${CTPUSH}" == "Y" ]; then
+                        BRANCH=`cat ${HOME}/.gerritpush/branch`
+                        GURl=`cat ${HOME}/.gerritpush/gerritURL`
+                        git push ssh://${GUZER}@${GTEAM}:29418/${GURL} HEAD:refs/\for/${BRANCH}
+                  else
+                        new_branch
+                  fi
+        else
+         new_branch
+        fi
 else
   echo "Canceled"
 fi
@@ -285,16 +187,16 @@ if [ "${RESPa}" == "y" ] || [ "${RESPa}" == "Y" ]; then
    git commit --amend
    push
 elif [ "${RESPa}" == "n" ] || [ "${RESPa}" == "N" ]; then
-	echo "Please edit them"
-	echo "Press 1 after you edit them"
-	read amend1
-	if [ ${amend1} == "1" ]; then
-		git add -A
-		git commit --amend
-		push
-	else
-		echo "Take your time and come back when you are ready"
-	fi
+        echo "Please edit them"
+        echo "Press 1 after you edit them"
+        read amend1
+        if [ ${amend1} == "1" ]; then
+                git add -A
+                git commit --amend
+                push
+        else
+                echo "Take your time and come back when you are ready"
+        fi
 fi
 }
 
@@ -312,9 +214,9 @@ echo "Your entered ${GUZER} is this correct?"
 echo "Enter 1 for Yes and 2 for No"
    select correct1 in "Yes" "No"; do
    case ${correct1} in
-	Yes ) mkdir ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
-	No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
-	* ) clear; echo "Invalid Entry ${correct1}, Please re-try"; echo; echo; correct_gname break ;;
+        Yes ) mkdir ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
+        No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
+        * ) clear; echo "Invalid Entry ${correct1}, Please re-try"; echo; echo; correct_gname break ;;
    esac
   done
 }
@@ -322,15 +224,15 @@ echo "Enter 1 for Yes and 2 for No"
 
 nameq_question() {
 echo "Enter an option:"
-echo "   1. View your current gerrit username"
-echo "   2. Enter a new gerrit username"
+echo " 1. View your current gerrit username"
+echo " 2. Enter a new gerrit username"
   select NAME in "View" "New"; do
    case ${NAME} in
        View ) if [ -f ${HOME}/.gerritpush/username ]; then
            echo "Your current gerrit username is: ${GUZER}";
-	  else
-	   echo "No gerrit username found..";
-	  fi; break;;
+         else
+         echo "No gerrit username found..";
+         fi; break;;
       New ) echo -n "Enter your new gerrit username: "; read GUZER; correct_gname; break;;
       * ) echo "${NAME} is not a valid option (Choose 1 or 2)"; nameq_question; break;;
    esac
@@ -341,7 +243,7 @@ echo "   2. Enter a new gerrit username"
 sshkey() {
 team
 echo ""
-echo "Your gerrit team is set to: ${CHOICE}"
+echo "Your gerrit team is set to: ${TEAM}"
 echo ""
 echo "You will have to set this up for every Team's Gerrit"
 echo "But can use the same sshkeys for all"
@@ -349,7 +251,7 @@ echo ""
 if [ -e ${HOME}/.ssh/id_rsa.pub ]; then
    echo "SSH Key already exists.
 
-Go to ${CHOICE} Gerrit (${GTEAM}), sign in, go to settings, 
+Go to ${TEAM} Gerrit (${GTEAM}), sign in, go to settings,
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -357,7 +259,7 @@ read -p "Press [Enter] to open file..."
    gnome-open ${HOME}/.ssh/id_rsa.pub
 else
    ssh-keygen
-   echo "Go to ${CHOICE} Gerrit (${GTEAM}), sign in, go to settings, 
+   echo "Go to ${TEAM} Gerrit (${GTEAM}), sign in, go to settings,
 and click on SSH Public Keys. Use Control + Click to open URL.
 
 Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
@@ -405,9 +307,9 @@ uf() {
 
 
 install() {
-	set_up_user
-	team
-	branch
+        set_up_user
+        team
+        branch
 }
 
 
@@ -415,64 +317,64 @@ error() {
 echo "###################################################################"
 
 if [ -f ${HOME}/.gerritpush/username ]; then
-	DisplayUser=`cat ${HOME}/.gerritpush/username`
-	echo "Your gerrit username is: ${DisplayUser}"
+        DisplayUser=`cat ${HOME}/.gerritpush/username`
+        echo "Your gerrit username is: ${DisplayUser}"
 fi
 
 if [ -f ${HOME}/.gerritpush/team ]; then
-	DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
-	echo "Your gerrit team is set to: ${DisplayCHOICE}"
+        DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
+        echo "Your gerrit team is set to: ${DisplayCHOICE}"
 fi
 
 if [ -f ${HOME}/.gerritpush/branch ]; then
-	DisplayBranch=`cat ${HOME}/.gerritpush/branch`
-	echo "Your current branch is set to: ${DisplayBranch}"
+        DisplayBranch=`cat ${HOME}/.gerritpush/branch`
+        echo "Your current branch is set to: ${DisplayBranch}"
 fi
 echo "###################################################################"
 sleep 4; echo
 echo ""
 echo "###################################################################"
-echo "#                      Universal Gerrit Push                      #"
-echo "#                                                                 #"
-echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
-echo "#                                                                 #"
-echo "#                                                                 #"
+echo "# Universal Gerrit Push #"
+echo "# #"
+echo "# Created by Sniper/Goldflame09/wedgess/Papa Smurf151 #"
+echo "# #"
+echo "# #"
 echo "###################################################################"
 echo ""
 echo ""
 echo "###################################################################"
 echo ""
-	echo
-	echo "Usage: universal-review [-short command]"
-	echo "Or:    universal-review [long command]"
-	echo
-	echo
-	echo "###################################################################"
-	echo
-	echo "                COMMANDS:"
-	echo
-	echo "   install	(-in)  --- Intital Setup"
-	echo "   team 	(-nt)  --- Change Team Gerrits"
-	echo "   add+push	(-ap)  --- Add and push to gerrit"
-	echo "   amend  	(-am)  --- Amend the commit and push"
-	echo "   author	(-au)  --- Change author of commit"
-	echo "   force	(-uf)  --- Force the script to grab a new version"
-	echo "   name         (-n)   --- View or edit your gerrit username"
-	echo "   branch	(-nb)  --- Choose a new branch to push to"
-	echo "   push   	(-p)   --- Push to gerrit"
-	echo "   sshkey 	(-ssh) --- Create/show SSH key to put on Gerrit"
-	echo "   update 	(-u)   --- Check for, and download an update if one is available"
-	echo
-	echo "###################################################################"
-	echo
-	echo "If you encounter problems, check if:"
-	echo "   1. Your gerrit username is correct (using the name option)"
-	echo "   2. Your current branch is correct"
-	echo "   3. Your public ssh key is attached to your gerrit profile"
-	echo
-	echo "If you still encounter problems, ask on the official PAC-man forum at:"
-	echo "http://forum.pac-rom.com . . . . Press Control + Click to open URL"
-	echo
+        echo
+        echo "Usage: universal-review [-short command]"
+        echo "Or: universal-review [long command]"
+        echo
+        echo
+        echo "###################################################################"
+        echo
+        echo " COMMANDS:"
+        echo
+        echo " install        (-in) --- Intital Setup"
+        echo " team         (-nt) --- Change Team Gerrits"
+        echo " add+push        (-ap) --- Add and push to gerrit"
+        echo " amend         (-am) --- Amend the commit and push"
+        echo " author        (-au) --- Change author of commit"
+        echo " force        (-uf) --- Force the script to grab a new version"
+        echo " name (-n) --- View or edit your gerrit username"
+        echo " branch        (-nb) --- Choose a new branch to push to"
+        echo " push         (-p) --- Push to gerrit"
+        echo " sshkey         (-ssh) --- Create/show SSH key to put on Gerrit"
+        echo " update         (-u) --- Check for, and download an update if one is available"
+        echo
+        echo "###################################################################"
+        echo
+        echo "If you encounter problems, check if:"
+        echo " 1. Your gerrit username is correct (using the name option)"
+        echo " 2. Your current branch is correct"
+        echo " 3. Your public ssh key is attached to your gerrit profile"
+        echo
+        echo "If you still encounter problems, ask on the official PAC-man forum at:"
+        echo "http://forum.pac-rom.com . . . . Press Control + Click to open URL"
+        echo
 
 }
 
@@ -480,9 +382,9 @@ install
 clear
 
 if [ ! -d ${HOME}/bin ]; then
-	mkdir -p ${HOME}/bin
-	echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
-	echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
+        mkdir -p ${HOME}/bin
+        echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
+        echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
 fi
 
 
