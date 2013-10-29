@@ -17,7 +17,7 @@ BRANCH1=("jb-mr2" "jb3" "jellybean-mr1" "cm-10.1" "jb-mr2" "jb4.3" "android-4.3"
 BRANCH2=("jb-mr1" "jb2" "jellybean-mr2.1" "cm-10.2" "jb-mr1" "" "" "jb43" "cm-10.2" "jb42")
 BRANCH3=("gh-pages" "" "" "" "du43" "" "" "gh-pages" "gh-pages" "jb42-master")
 BRANCH4=("" "" "" "" "gh-pages" "" "" "" "" "jb43")
-URL=("AOKP/android_etc" "CarbonDev/android_etc" "ChameleonOS/android_etc" "CyanogenMod/android_etc" "android_etc" "TEAM-Gummy/android_etc" "android_etc" "ParanoidAndroid/android_etc" "android_etc" "android_etc") # <--This is just a best guess as to what the correct URLs are.  May need editing
+URL=("AOKP/" "CarbonDev/" "ChameleonOS/" "CyanogenMod/" "" "TEAM-Gummy/" "" "ParanoidAndroid" "" "")
 
 set_up_user(){
 if [ -f ${HOME}/.gerritpush/username ]; then
@@ -64,7 +64,7 @@ new_team() {
                 echo "Enter the Corresponding Number"
                 select NUMBER in $(echo ${TEAM[@]}); do
                 	case ${NUMBER} in
-				AOKP) i=0; break;;
+							AOKP) i=0; break;;
                         	Carbon) i=1; break;;
                         	Chameleon-OS) i=2; break;;
                         	CyanogenMod) i=3; break;;
@@ -153,9 +153,12 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
            echo "Current branch: `cat ${HOME}/.gerritpush/branch`"
            echo -n "Push to current branch? (y/n): "; read CTPUSH
                   if [ "${CTPUSH}" == "y" ] || [ "${CTPUSH}" == "Y" ]; then
-                        BRANCH=`cat ${HOME}/.gerritpush/branch`
+                        GUZER=`cat ${HOME}/.gerritpush/username`
+						GTEAM=`cat ${HOME}/.gerritpush/team`
+						BRANCH=`cat ${HOME}/.gerritpush/branch`
                         GURl=`cat ${HOME}/.gerritpush/gerritURL`
-                        git push ssh://${GUZER}@${GTEAM}:29418/${GURL} HEAD:refs/\for/${BRANCH}
+						PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
+                        git push ssh://${GUZER}@${GTEAM}:29418/${GURL}${PROJECT}HEAD:refs/\for/${BRANCH}
                   else
                         new_branch
                   fi
