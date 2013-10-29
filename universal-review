@@ -43,7 +43,7 @@ team() {
                 GTEAM=`cat ${HOME}/.gerritpush/team`
                 TEAM=`cat ${HOME}/.gerritpush/teamCHOICE`
 				if [ -f ${HOME}/.gerritpush/gerritURL ]; then
-					GURL=`cat ${HOME}/.gerritpush/gerritURL
+					GURL=`cat ${HOME}/.gerritpush/gerritURL`
 				fi
         else
                 new_team
