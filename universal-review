@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -vm
 
 ###################################################################
 # #
@@ -16,7 +16,7 @@ BRANCH1=("jb-mr2" "jb3" "jellybean-mr1" "cm-10.1" "jb-mr2" "jb4.3" "android-4.3"
 BRANCH2=("jb-mr1" "jb2" "jellybean-mr2.1" "cm-10.2" "jb-mr1" "" "" "jb43" "cm-10.2" "jb42")
 BRANCH3=("gh-pages" "" "" "" "du43" "" "" "gh-pages" "gh-pages" "jb42-master")
 BRANCH4=("" "" "" "" "gh-pages" "" "" "" "" "jb43")
-URL=("AOKP/" "CarbonDev/" "ChameleonOS/" "CyanogenMod/" "" "TEAM-Gummy/" "" "ParanoidAndroid" "" "")
+URL=(":29418/AOKP/" ":29418/CarbonDev/" ":29418/ChameleonOS/" ":29418/CyanogenMod/" ":29418/" ":29418/TEAM-Gummy/" ":29418/" ":29418/ParanoidAndroid/" ":29418/" ":29418/")
 
 set_up_user(){
 if [ -f ${HOME}/.gerritpush/username ]; then
@@ -86,6 +86,7 @@ new_team() {
         mkdir -p ${HOME}/.gerritpush; echo ${GTEAM[$i]} > ${HOME}/.gerritpush/team;
         mkdir -p ${HOME}/.gerritpush; echo ${TEAM[$i]} > ${HOME}/.gerritpush/teamCHOICE;
         mkdir -p ${HOME}/.gerritpush; echo ${URL[$i]} > ${HOME}/.gerritpush/gerritURL;
+	sleep 2;echo
         clear; echo "Default Set to ${TEAM}"; echo
         rm ${HOME}/.gerritpush/branch > /dev/null 2>&1
         new_branch
@@ -158,8 +159,9 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 						GTEAM=`cat ${HOME}/.gerritpush/team`
 						BRANCH=`cat ${HOME}/.gerritpush/branch`
                         GURL=`cat ${HOME}/.gerritpush/gerritURL`
-						PROJECT=`cat .git/config | awk -F"projectname = " '{print $2}' `
-                        git push ssh://${GUZER}@${GTEAM}:29418/${GURL}${PROJECT}HEAD:refs/\for/${BRANCH}
+						PROJECT=`grep "projectname" .git/config | awk -F"projectname = " '{print $2}' | sed -e 's/^[ \t]*//' `
+						echo "${PROJECT}"
+                        echo "git push ssh://${GUZER}@${GTEAM}${GURL}${PROJECT} HEAD:refs/\for/${BRANCH}"
                   else
                         new_branch
                   fi
