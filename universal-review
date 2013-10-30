@@ -201,12 +201,15 @@ fi
 
 
 ap() {
+safety=`cat ${HOME}/.gerritpush/safety`
 git add -A
 scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
-   echo "Add commit message below.
+	echo "Add commit message below.
 --------------------------"
-   read MSSG
-   correct_commit
+	read MSSG
+	if [ ${safety} -eq "1" ]; then
+		correct_commit
+	if
 git commit -a -m "${MSSG}"
 push
 }
@@ -256,8 +259,8 @@ echo "Enter 1 for Yes and 2 for No"
 
 nameq_question() {
 echo "Enter an option:"
-echo " 1. View your current gerrit username"
-echo " 2. Enter a new gerrit username"
+echo " 1. (View) your current gerrit username"
+echo " 2. Enter a (New) gerrit username"
   select NAME in "View" "New"; do
    case ${NAME} in
        View ) if [ -f ${HOME}/.gerritpush/username ]; then
@@ -265,7 +268,10 @@ echo " 2. Enter a new gerrit username"
          else
          echo "No gerrit username found..";
          fi; break;;
-      New ) echo -n "Enter your new gerrit username: "; read GUZER; correct_gname; break;;
+      New ) echo -n "Enter your new gerrit username: "; read GUZER;
+			if [ ${safety} -eq "1" ]; then
+				correct_gname;
+			fi; break;;
       * ) echo "${NAME} is not a valid option (Choose 1 or 2)"; nameq_question; break;;
    esac
   done
@@ -309,14 +315,19 @@ new() {
 }
 
 ask_the_question() {
-echo -n "Are you sure you want to update to version: ${NEWV} build: ${NEWB}? (yes/no)"
-select correct4 in "Yes" "No"; do
-  case ${correct4} in
-      Yes ) rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; echo; echo "Successfully updated to v${NEWV}!"; break;;
-      No ) echo "Update canceled"; break ;;
-      * ) clear; echo "Invalid option ${correct4}, Please try again..."; echo; ask_the_question; break;;
-   esac
-done
+safety=`cat ${HOME}/.gerritpush/safety`
+if [ ${safety} -eq "1" ]; then
+	echo -n "Are you sure you want to update to version: ${NEWV} build: ${NEWB}? (yes/no)"
+	select correct4 in "Yes" "No"; do
+		case ${correct4} in
+			Yes ) rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; echo; echo "Successfully updated to v${NEWV}!"; break;;
+			No ) echo "Update canceled"; break ;;
+			* ) clear; echo "Invalid option ${correct4}, Please try again..."; echo; ask_the_question; break;;
+		esac
+	done
+else
+	rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; echo; echo "Successfully updated to v${NEWV}!";
+fi
 }
 
 
@@ -357,6 +368,10 @@ saftey() {
 		echo "Would you like to change Safety checks? (y/n)"
 		read SAFE
 		if [ "${SAFE}" == "y" ] || [ "${RESP}" == "Y" ]; then
+			echo "By turning safety off your taking the rish of messing things up royally"
+			echo
+			echo "You do this at your own risk"
+			echo
 			echo "Turn On or Off ?"
 			select safety1 in "On" "Off"; do
 			case ${safety} in
