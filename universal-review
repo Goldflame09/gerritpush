@@ -159,7 +159,11 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
 						GTEAM=`cat ${HOME}/.gerritpush/team`
 						BRANCH=`cat ${HOME}/.gerritpush/branch`
                         GURL=`cat ${HOME}/.gerritpush/gerritURL`
+						
 						PROJECT=`grep "projectname" .git/config | awk -F"projectname = " '{print $2}' | sed -e 's/^[ \t]*//' `
+						if [ -z ${PROJECT} ]; then
+							PROJECT=grep "url" .git/config | awk -F"url = " '{print $2}' | rev | cut -d/ -f1 | rev | cut -d. -f1
+						fi
 						echo "${PROJECT}"
                         echo "git push ssh://${GUZER}@${GTEAM}${GURL}${PROJECT} HEAD:refs/\for/${BRANCH}"
                   else
