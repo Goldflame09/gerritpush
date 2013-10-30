@@ -19,22 +19,30 @@ BRANCH4=("" "" "" "" "gh-pages" "" "" "" "" "jb43")
 URL=(":29418/AOKP/" ":29418/CarbonDev/" ":29418/ChameleonOS/" ":29418/CyanogenMod/" ":29418/" ":29418/TEAM-Gummy/" ":29418/" ":29418/ParanoidAndroid/" ":29418/" ":29418/")
 
 set_up_user(){
+safety=`cat ${HOME}/.gerritpush/safety`
+
 if [ -f ${HOME}/.gerritpush/username ]; then
    GUZER=`cat ${HOME}/.gerritpush/username`
 else
    clear
    echo -n "Please enter your Gerrit UserName: "; read GUZER; clear
-   echo "Your entered ${GUZER} is this correct"
-   echo "Enter 1 for Yes or 2 for No"
-   select correct1 in "Yes" "No"; do
-   case ${correct1} in
-        Yes ) mkdir -p ${HOME}/.gerritpush;
-              echo ${GUZER} > ${HOME}/.gerritpush/username;
-              clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
-        No ) clear; echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
-        *) clear; echo "Invalid Entry ${correct1}, Please enter a number between [1 - 2]"; echo; set_up_user; break;;
-   esac
- done
+   if [ ${safety} -eq "1" ]; then
+		echo "Your entered ${GUZER} is this correct"
+		echo "Enter 1 for Yes or 2 for No"
+		select correct1 in "Yes" "No"; do
+			case ${correct1} in
+				Yes ) mkdir -p ${HOME}/.gerritpush;
+					echo ${GUZER} > ${HOME}/.gerritpush/username;
+					clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
+				No ) clear; echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
+				*) clear; echo "Invalid Entry ${correct1}, Please enter a number between [1 - 2]"; echo; set_up_user; break;;
+			esac
+		done
+	else
+		mkdir -p ${HOME}/.gerritpush;
+		echo ${GUZER} > ${HOME}/.gerritpush/username;
+		clear;
+	fi
 fi
 }
 
@@ -52,7 +60,7 @@ team() {
 
 
 new_team() {
-                if [ -f ${HOME}/.gerritpush/team ]; then
+				if [ -f ${HOME}/.gerritpush/team ]; then
                         DisplayTeam=`cat ${HOME}/.gerritpush/teamCHOICE`
                         echo ""
                         echo "###################################################################"
@@ -149,8 +157,11 @@ echo "Enter 1 for Yes and 2 for No"
 
 
 push() {
-echo -n "Are you sure you want to push? (y/n): "; read RESP
-if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
+safety=`cat ${HOME}/.gerritpush/safety`
+
+if [ ${safety} -eq "1" ]; then
+	echo -n "Are you sure you want to push? (y/n): "; read RESP
+	if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
         if [ -f ${HOME}/.gerritpush/branch ]; then
            echo "Current branch: `cat ${HOME}/.gerritpush/branch`"
            echo -n "Push to current branch? (y/n): "; read CTPUSH
@@ -171,8 +182,20 @@ if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
         else
          new_branch
         fi
+	else
+	echo "Canceled"
+	fi
 else
-  echo "Canceled"
+	GUZER=`cat ${HOME}/.gerritpush/username`
+	GTEAM=`cat ${HOME}/.gerritpush/team`
+	BRANCH=`cat ${HOME}/.gerritpush/branch`
+    GURL=`cat ${HOME}/.gerritpush/gerritURL`
+						
+	PROJECT=`grep "projectname" .git/config | awk -F"projectname = " '{print $2}' | sed -e 's/^[ \t]*//' `
+	if [ -z ${PROJECT} ]; then
+		PROJECT=`grep "url" .git/config | awk -F"url = " '{print $2}' | rev | cut -d/ -f1 | rev | cut -d. -f1`
+	fi
+    git push ssh://${GUZER}@${GTEAM}${GURL}${PROJECT} HEAD:refs/\for/${BRANCH}
 fi
 }
 
@@ -314,8 +337,40 @@ uf() {
    echo "Forced update to v${NEWV}!"
 }
 
+saftey() {
+		if [ -f ${HOME}/.gerritpush/safety ]; then
+			TEMP=`cat ${HOME}/.gerritpush/safety`
+			if [ ${TEMP == 1}; then
+				DisplaySafety="On"
+			else
+				DisplaySafety="Off"
+			fi
+			
+            echo ""
+            echo "###################################################################"
+            echo ""
+            echo "Your Safety is set to: ${DisplaySafety}"
+            echo ""
+            echo "###################################################################"
+            echo ""
+        fi
+		echo "Would you like to change Safety checks? (y/n)"
+		read SAFE
+		if [ "${SAFE}" == "y" ] || [ "${RESP}" == "Y" ]; then
+			echo "Turn On or Off ?"
+			select safety1 in "On" "Off"; do
+			case ${safety} in
+				On ) rm -f ${HOME}/.gerritpush/safety; mkdir -p ${HOME}/.gerritpush; echo "1" > ${HOME}/.gerritpush/safety; break;;
+				Off ) rm -f ${HOME}/.gerritpush/safety; mkdir -p ${HOME}/.gerritpush; echo "0" > ${HOME}/.gerritpush/safety; break;;
+				* ) clear; echo "Invalid Entry ${safety1}, Please re-try"; echo; echo; saftey break ;;
+			esac
+		fi
+			
 
 install() {
+		if [ ! -f ${HOME}/.gerritpush/safety ]; then
+			mkdir -p ${HOME}/.gerritpush; echo "1" > ${HOME}/.gerritpush/safety;
+		fi
         set_up_user
         team
         branch
@@ -338,6 +393,10 @@ fi
 if [ -f ${HOME}/.gerritpush/branch ]; then
         DisplayBranch=`cat ${HOME}/.gerritpush/branch`
         echo "Your current branch is set to: ${DisplayBranch}"
+fi
+if [ -f ${HOME}/.gerritpush/safety ]; then
+        DisplaySafety=`cat ${HOME}/.gerritpush/safety`
+        echo "Your Safety Checks are set to: ${DisplaySafety}"
 fi
 echo "###################################################################"
 sleep 4; echo
@@ -372,6 +431,7 @@ echo ""
         echo " branch        (-nb) --- Choose a new branch to push to"
         echo " push         (-p) --- Push to gerrit"
         echo " sshkey         (-ssh) --- Create/show SSH key to put on Gerrit"
+		echo " safety        (-sa) --- Toggle Safety checks on and off"
         echo " update         (-u) --- Check for, and download an update if one is available"
         echo
         echo "###################################################################"
@@ -406,6 +466,7 @@ case $1 in
    -in|install)install;;
    -ssh|sshkey)sshkey;;
    -ap|add+push)ap;;
+   -sa|safety)safety;;
    -am|amend)amend;;
    -uf|force)uf;;
    -h|help|*)error;;
