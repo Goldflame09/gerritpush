@@ -85,7 +85,6 @@ new_team() {
                 done
         rm -f ${HOME}/.gerritpush/team
         rm -f ${HOME}/.gerritpush/teamCHOICE
-        rm -f ${HOME}/.gerritpush/projectNAME
         rm -f ${HOME}/.gerritpush/gerritURL
         mkdir -p ${HOME}/.gerritpush; echo ${GTEAM[$i]} > ${HOME}/.gerritpush/team;
         mkdir -p ${HOME}/.gerritpush; echo ${TEAM[$i]} > ${HOME}/.gerritpush/teamCHOICE;
