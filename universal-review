@@ -83,7 +83,7 @@ set_up_user(){
 }
 
 team() {
-    if [ -f ${GPDIR}/team ]; then
+    if [ ! -f ${GPDIR}/team ]; then
         GTEAM=$(cat ${GPDIR}/team)
         TEAM=$(cat ${GPDIR}/teamCHOICE)
         [[ -f ${GPDIR}/gerritURL ]] && GURL=$(cat ${GPDIR}/gerritURL) || new_team
