@@ -322,7 +322,8 @@ saftey() {
                         esac
                         done
                 fi
-                        
+}
+
 
 install() {
                 if [ ! -f ${HOME}/.gerritpush/safety ]; then
