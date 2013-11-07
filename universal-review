@@ -83,10 +83,10 @@ set_up_user(){
 }
 
 team() {
-if [ ! -f ${GPDIR}/team ]; then
-echo "NULL" > ${GPDIR}/team && GTEAM=$(cat ${GPDIR}/team)
-echo "NULL" > ${GPDIR}/teamCHOICE && ${DisplayTeam}=$(cat ${GPDIR}/teamCHOICE) &> /dev/null
-[[ -f ${GPDIR}/gerritURL ]] && GURL=$(cat ${GPDIR}/gerritURL) || new_team
+    if [ ! -f ${GPDIR}/team ]; then
+        echo "NULL" > ${GPDIR}/team && GTEAM=$(cat ${GPDIR}/team)
+        echo "NULL" > ${GPDIR}/teamCHOICE && ${DisplayTeam}=$(cat ${GPDIR}/teamCHOICE) &> /dev/null
+        [[ -f ${GPDIR}/gerritURL ]] && GURL=$(cat ${GPDIR}/gerritURL) || new_team
 fi
 }
 
