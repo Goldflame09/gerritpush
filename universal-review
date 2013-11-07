@@ -14,6 +14,26 @@ TEAM=($(awk {print $1} RS="" $arry))
 GTEAM=($(awk {print $2} RS="" $arry))
 URL=($(awk {print $3} RS="" $arry))
 
+red=$(tput setaf 1)             #  red
+grn=$(tput setaf 2)             #  green
+ylw=$(tput setaf 3)             #  yellow
+blu=$(tput setaf 4)             #  blue
+ppl=$(tput setaf 5)             #  purple
+cya=$(tput setaf 6)             #  cyan
+txtbld=$(tput bold)             #  Bold
+bldred=${txtbld}$(tput setaf 1) #  red
+bldgrn=${txtbld}$(tput setaf 2) #  green
+bldylw=${txtbld}$(tput setaf 3) #  yellow
+bldblu=${txtbld}$(tput setaf 4) #  blue
+bldppl=${txtbld}$(tput setaf 5) #  purple
+bldcya=${txtbld}$(tput setaf 6) #  cyan
+txtrst=$(tput sgr0)             #  Reset
+rev=$(tput rev)                 #  Reverse color
+pplrev=${rev}$(tput setaf 5)
+cyarev=${rev}$(tput setaf 6)
+ylwrev=${rev}$(tput setaf 3)
+blurev=${rev}$(tput setaf 4)
+
 
 user(){
 		clear
@@ -32,7 +52,7 @@ set_up_user(){
 					echo ""
 					echo "###################################################################"
 					echo ""
-					echo "Your gerrit team is set to: ${DisplayName}"
+					echo ${bldcya}"Your gerrit team is set to: ${DisplayName}"${txtrst}
 					echo ""
 					echo "###################################################################"
 					echo ""
@@ -78,14 +98,14 @@ new_team() {
                 echo ""
                 echo "###################################################################"
                 echo ""
-                echo "Your gerrit team is set to: ${DisplayTeam}"
+                echo ${bldcya}"Your gerrit team is set to: ${DisplayTeam}"${txtrst}
                 echo ""
                 echo "###################################################################"
                 echo ""
             fi
             echo "Please Select your new Gerrit Team:"
             echo "Enter the Corresponding Number"
-            select NUMBER in $(echo ${TEAM[@]}); do
+            select NUMBER in $(echo ${bldcya}${TEAM[@]}${txtrst}); do
                 case ${NUMBER} in
                     AOKP) i=0; break;;
                     Carbon) i=1; break;;
@@ -107,17 +127,17 @@ new_team() {
 			mkdir -p ${HOME}/.gerritpush; echo ${TEAM[$i]} > ${HOME}/.gerritpush/teamCHOICE;
 			mkdir -p ${HOME}/.gerritpush; echo ${URL[$i]} > ${HOME}/.gerritpush/gerritURL;
 			sleep 2;echo
-			clear; echo "Default Set to ${TEAM}"; echo
+			clear; echo "Default Set to ${bldcya}${TEAM}${txtrst}"; echo
 }
 
 
 correct_commit() {
-				clear; echo ${MSSG}; echo
+				clear; echo ${bldcya}${MSSG}${txtrst}; echo
 				echo "Is this correct ??"
 				echo "Enter 1 for Yes and 2 for No"
   				select correct2 in "Yes" "No"; do
 					case ${correct2} in
-        				Yes ) echo "Commit set to ${MSSG}"; break;;
+        				Yes ) echo "Commit set to ${bldcya}${MSSG}${txtrst}"; break;;
         				No ) echo "Re-enter commit message"; read MSSG; break;;
         				* ) clear; echo "Invalid Entry ${correct2}, Please re-try"; echo; echo; correct_commit; break;;
 					esac
@@ -201,8 +221,8 @@ author() {
 
 
 correct_gname() {
-				echo "Your entered ${GUZER} is this correct?"
-				echo "Enter (Yes) or (No)"
+				echo "Your entered ${bldcya}${GUZER}${txtrst} is this correct?"
+				echo "Enter ${bldcya}(Yes)${txtrst} or ${bldred}(No)${txtrst}"
 				select correct1 in "Yes" "No"; do
 					case ${correct1} in
 						Yes ) mkdir ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
@@ -220,7 +240,7 @@ nameq_question() {
 				select NAME in "View" "New"; do
 					case ${NAME} in
 						View )  if [ -f ${HOME}/.gerritpush/username ]; then
-									echo "Your current gerrit username is: ${GUZER}";
+									echo "Your current gerrit username is: ${bldcya}${GUZER}${txtrst}";
 								else
 									echo "No gerrit username found..";
 								fi; break;;
@@ -237,7 +257,7 @@ nameq_question() {
 sshkey() {
 		team
 		echo ""
-		echo "Your gerrit team is set to: ${TEAM}"
+		echo "Your gerrit team is set to: ${bldcya}${TEAM}${txtrst}"
 		echo ""
 		echo "You will have to set this up for every Team's Gerrit"
 		echo "But can use the same sshkeys for all"
@@ -308,7 +328,7 @@ uf() {
 saftey() {
         if [ -f ${HOME}/.gerritpush/safety ]; then
             TEMP=`cat ${HOME}/.gerritpush/safety`
-            if [ ${TEMP == 1}; then
+            if [ ${TEMP} == 1}; then
                 DisplaySafety="On"
             else
                 DisplaySafety="Off"
@@ -316,7 +336,7 @@ saftey() {
             echo ""
             echo "###################################################################"
             echo ""
-            echo "Your Safety is set to: ${DisplaySafety}"
+            echo "Your Safety is set to: ${bldcya}${DisplaySafety}${txtrst}"
             echo ""
             echo "###################################################################"
             echo ""
@@ -328,7 +348,7 @@ saftey() {
             echo
             echo "You do this at your own risk"
             echo
-            echo "Turn (On) or (Off) ?"
+            echo "Turn ${bldcya}(On)${txtrst} or ${bldred}(Off)${txtrst} ?"
             select safety1 in "On" "Off"; do
                 case ${safety} in
                     On ) rm -f ${HOME}/.gerritpush/safety; mkdir -p ${HOME}/.gerritpush; echo "1" > ${HOME}/.gerritpush/safety; break;;
@@ -353,36 +373,39 @@ setup() {
 
 
 error() {
-echo "###################################################################"
+		echo "###################################################################"
 
-if [ -f ${HOME}/.gerritpush/username ]; then
-        DisplayUser=`cat ${HOME}/.gerritpush/username`
-        echo "Your gerrit username is: ${DisplayUser}"
-fi
+		if [ -f ${HOME}/.gerritpush/username ]; then
+			DisplayUser=`cat ${HOME}/.gerritpush/username`
+			echo "Your gerrit username is: ${bldcya}${DisplayUser}${txtrst}"
+		fi
 
-if [ -f ${HOME}/.gerritpush/team ]; then
-        DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
-        echo "Your gerrit team is set to: ${DisplayCHOICE}"
-fi
+		if [ -f ${HOME}/.gerritpush/team ]; then
+			DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
+			echo "Your gerrit team is set to: ${bldcya}${DisplayCHOICE}${txtrst}"
+		fi
 
-if [ -f ${HOME}/.gerritpush/safety ]; then
-        DisplaySafety=`cat ${HOME}/.gerritpush/safety`
-        echo "Your Safety Checks are set to: ${DisplaySafety}"
-fi
-echo "###################################################################"
-sleep 4; echo
-echo ""
-echo "###################################################################"
-echo "# Universal Gerrit Push #"
-echo "# #"
-echo "# Created by Sniper/Goldflame09/wedgess/Papa Smurf151 #"
-echo "# #"
-echo "# #"
-echo "###################################################################"
-echo ""
-echo ""
-echo "###################################################################"
-echo ""
+		if [ -f ${HOME}/.gerritpush/safety ]; then
+			Saftey=`cat ${HOME}/.gerritpush/safety`
+			if [ ${Saftey} == 1}; then
+				DisplaySafety="On"
+			else
+				DisplaySafety="Off"
+			fi
+			echo ${bldcya}"Your Safety Checks are set to: ${bldcya}${DisplaySafety}${txtrst}"
+		fi
+		echo ${bldylw}"###################################################################"
+		sleep 4;
+		echo "#                                                                 #"
+		echo "#                     Universal Gerrit Review                     #"
+		echo "#                                                                 #"
+		echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
+		echo "#                                                                 #"
+		echo "#                        A PAC-man Project                        #"
+		echo "#                                                                 #"
+		echo "###################################################################"${txtrst}
+		sleep 3;
+		echo ""
         echo
         echo "Usage: universal-review [-short command]"
         echo "Or: universal-review [long command]"
@@ -390,41 +413,41 @@ echo ""
         echo
         echo "###################################################################"
         echo
-        echo " COMMANDS:"
+        echo ${bldred}"                           COMMANDS: "${txtrst}
         echo
-        echo " setup (-su) --- Intital Setup"
-        echo " team (-nt) --- Change Team Gerrits"
-        echo " add+push (-ap) --- Add and push to gerrit"
-        echo " amend (-am) --- Amend the commit and push"
-        echo " author (-au) --- Change author of commit"
-        echo " force (-uf) --- Force the script to grab a new version"
-        echo " name (-n) --- View or edit your gerrit username"
-        echo " push (-p) --- Push to gerrit"
-        echo " sshkey (-ssh) --- Create/show SSH key to put on Gerrit"
-                echo " safety (-sa) --- Toggle Safety checks on and off"
-        echo " update (-u) --- Check for, and download an update if one is available"
+        echo " ${bldcya}setup (-su)${txtrst} --- ${bldylw}Intital Setup${txtrst} "
+        echo " ${bldcya}team (-nt)${txtrst} --- ${bldylw}Change Team Gerrits${txtrst} "
+        echo " ${bldcya}add+push (-ap)${txtrst} --- ${bldylw}Add and push to gerrit${txtrst} "
+        echo " ${bldcya}amend (-am)${txtrst} --- ${bldylw}Amend the commit and push${txtrst} "
+        echo " ${bldcya}author (-au)${txtrst} --- ${bldylw}Change author of commit${txtrst} "
+        echo " ${bldcya}force (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
+        echo " ${bldcya}name (-n)${txtrst} --- ${bldylw}View or edit your gerrit username${txtrst} "
+        echo " ${bldcya}push (-p)${txtrst} --- ${bldylw}Push to gerrit${txtrst} "
+        echo " ${bldcya}sshkey (-ssh)${txtrst} --- ${bldylw}Create/show SSH key to put on Gerrit${txtrst} "
+        echo " ${bldcya}safety (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
+        echo " ${bldcya}update (-u)${txtrst} --- ${bldylw}Check for and download an update if available${txtrst} "
         echo
         echo "###################################################################"
         echo
-        echo "If you encounter problems, check if:"
+        echo " If you encounter problems, check if:"
         echo " 1. Your gerrit username is correct (using the name option)"
         echo " 2. Your current branch is correct"
         echo " 3. Your public ssh key is attached to your gerrit profile"
         echo
-        echo "If you still encounter problems, ask on the official PAC-man forum at:"
-        echo "http://forum.pac-rom.com . . . . Press Control + Click to open URL"
+        echo " If you still encounter problems, ask at Universal thread:"
+        echo " ${bldcya}http://forum.pac-rom.com${txtrst} . . . Press Control + Click to open URL"
         echo
-
 }
 
-setup
-clear
 
 if [ ! -d ${HOME}/bin ]; then
         mkdir -p ${HOME}/bin
         echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
         echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
 fi
+
+setup
+clear
 
 
 case $1 in
