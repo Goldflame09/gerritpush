@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -vm
 
 ###################################################################
 # #
@@ -149,7 +149,7 @@ scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
         read MSSG
         if [ ${safety} -eq "1" ]; then
                 correct_commit
-        if
+        fi
 git commit -a -m "${MSSG}"
 push
 }
@@ -267,7 +267,7 @@ if [ ${safety} -eq "1" ]; then
                 esac
         done
 else
-        Yes ) rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; rm -f ${HOME}/.gerritpush/teamProjects; mv ${HOME}/.gerritpush/.newproject ${HOME}/bin/teamProjects; chmod +x ${HOME}/bin/teamProjects; echo; echo "Successfully updated to v${NEWV}!"; break;;
+        rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; rm -f ${HOME}/.gerritpush/teamProjects; mv ${HOME}/.gerritpush/.newproject ${HOME}/bin/teamProjects; chmod +x ${HOME}/bin/teamProjects; echo; echo "Successfully updated to v${NEWV}!"
 fi
 }
 
@@ -320,6 +320,7 @@ saftey() {
                                 Off ) rm -f ${HOME}/.gerritpush/safety; mkdir -p ${HOME}/.gerritpush; echo "0" > ${HOME}/.gerritpush/safety; break;;
                                 * ) clear; echo "Invalid Entry ${safety1}, Please re-try"; echo; echo; saftey break ;;
                         esac
+                        done
                 fi
                         
 
