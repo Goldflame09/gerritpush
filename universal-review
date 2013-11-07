@@ -1,465 +1,448 @@
-#!/bin/bash -vm
+#!/bin/bash
 
 ###################################################################
-# #
+#                                                                 #
 # Created by Sniper/Goldflame09/wedgess/Papa Smurf151 for PAC-man #
-# #
+#                                                                 #
 ###################################################################
 
 VERSION=1.0
 BUILD=1
 
-arry=${HOME}/.gerritpush/arrays
-TEAM=($(awk {print $1} RS="" $arry))
-GTEAM=($(awk {print $2} RS="" $arry))
-URL=($(awk {print $3} RS="" $arry))
+GPDIR="${HOME}/.gerritpush"
 
-red=$(tput setaf 1)             #  red
-grn=$(tput setaf 2)             #  green
-ylw=$(tput setaf 3)             #  yellow
-blu=$(tput setaf 4)             #  blue
-ppl=$(tput setaf 5)             #  purple
-cya=$(tput setaf 6)             #  cyan
-txtbld=$(tput bold)             #  Bold
-bldred=${txtbld}$(tput setaf 1) #  red
-bldgrn=${txtbld}$(tput setaf 2) #  green
-bldylw=${txtbld}$(tput setaf 3) #  yellow
-bldblu=${txtbld}$(tput setaf 4) #  blue
-bldppl=${txtbld}$(tput setaf 5) #  purple
-bldcya=${txtbld}$(tput setaf 6) #  cyan
-txtrst=$(tput sgr0)             #  Reset
-rev=$(tput rev)                 #  Reverse color
+ARRY=${GPDIR}/projects
+TEAM=($(awk '{print $1}' RS="" $ARRY))
+GTEAM=($(awk '{print $2}' RS="" $ARRY))
+URL=($(awk '{print $3}' RS="" $ARRY))
+
+red=$(tput setaf 1) # red
+grn=$(tput setaf 2) # green
+ylw=$(tput setaf 3) # yellow
+blu=$(tput setaf 4) # blue
+ppl=$(tput setaf 5) # purple
+cya=$(tput setaf 6) # cyan
+txtbld=$(tput bold) # Bold
+bldred=${txtbld}$(tput setaf 1) # red
+bldgrn=${txtbld}$(tput setaf 2) # green
+bldylw=${txtbld}$(tput setaf 3) # yellow
+bldblu=${txtbld}$(tput setaf 4) # blue
+bldppl=${txtbld}$(tput setaf 5) # purple
+bldcya=${txtbld}$(tput setaf 6) # cyan
+txtrst=$(tput sgr0) # Reset
+rev=$(tput rev) # Reverse color
 pplrev=${rev}$(tput setaf 5)
 cyarev=${rev}$(tput setaf 6)
 ylwrev=${rev}$(tput setaf 3)
 blurev=${rev}$(tput setaf 4)
 
+do_checks(){
+    [[ ! -d ${GPDIR} ]] && mkdir -p ${GPDIR}; sleep .5
+    [[ ! -f ${GPDIR}/safety ]] && echo "1" > ${GPDIR}/safety
+    [[ ! -f ${ARRY} ]] && curl http://pac-rom.com/downloads/projects > ${ARRY}
+    safety=$(cat ${GPDIR}/safety)
+}
 
 user(){
-		clear
-		if [ -f ${HOME}/.gerritpush/username ]; then
-			GUZER=`cat ${HOME}/.gerritpush/username`
-		else
-			set_up_user
-		fi
+    clear; [[ -f ${HOME}/.gerritpush/username ]] && \
+    GUZER=$(cat ${HOME}/.gerritpush/username) || set_up_user
 }
 
 
 set_up_user(){
-				safety=`cat ${HOME}/.gerritpush/safety`
-				if [ -f ${HOME}/.gerritpush/username ]; then
-					DisplayName=`cat ${HOME}/.gerritpush/username`
-					echo ""
-					echo "###################################################################"
-					echo ""
-					echo ${bldcya}"Your gerrit team is set to: ${DisplayName}"${txtrst}
-					echo ""
-					echo "###################################################################"
-					echo ""
-				fi
-				echo -n "Please enter your New Gerrit UserName: "; read GUZER; clear
-				if [ ${safety} -eq "1" ]; then
-					echo "Your entered ${GUZER} is this correct"
-					echo "Enter 1 for Yes or 2 for No"
-					select correct1 in "Yes" "No"; do
-						case ${correct1} in
-							Yes ) mkdir -p ${HOME}/.gerritpush;
-								echo ${GUZER} > ${HOME}/.gerritpush/username;
-								clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
-							No ) clear; echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; clear; echo "Your new gerrit username is: ${GUZER}"; echo; break;;
-							*) clear; echo "Invalid Entry ${correct1}, Please enter a number between [1 - 2]"; echo; set_up_user; break;;
-						esac
-					done
-				else
-					mkdir -p ${HOME}/.gerritpush;
-					echo ${GUZER} > ${HOME}/.gerritpush/username;
-					clear;
-				fi
-}
-
-
-team() {
-		clear
-        if [ -f ${HOME}/.gerritpush/team ]; then
-                GTEAM=`cat ${HOME}/.gerritpush/team`
-                TEAM=`cat ${HOME}/.gerritpush/teamCHOICE`
-                if [ -f ${HOME}/.gerritpush/gerritURL ]; then
-                    GURL=`cat ${HOME}/.gerritpush/gerritURL`
-                fi
-        else
-            new_team
-        fi
-}
-
-
-new_team() {
-            if [ -f ${HOME}/.gerritpush/team ]; then
-                DisplayTeam=`cat ${HOME}/.gerritpush/teamCHOICE`
-                echo ""
-                echo "###################################################################"
-                echo ""
-                echo ${bldcya}"Your gerrit team is set to: ${DisplayTeam}"${txtrst}
-                echo ""
-                echo "###################################################################"
-                echo ""
-            fi
-            echo "Please Select your new Gerrit Team:"
-            echo "Enter the Corresponding Number"
-            select NUMBER in $(echo ${bldcya}${TEAM[@]}${txtrst}); do
-                case ${NUMBER} in
-                    AOKP) i=0; break;;
-                    Carbon) i=1; break;;
-                    Chameleon-OS) i=2; break;;
-                    CyanogenMod) i=3; break;;
-                    Dirty-Unicorns) i=4; break;;
-                    Gummy) i=5; break;;
-                    Omni) i=6; break;;
-                    Paranoid-Android) i=7; break;;
-                    PAC) i=8; break;;
-                    Vanir) i=9; break;;
-                    *) echo "Invalid Entry ${NUMBER}, Please enter from the options provided."; echo; echo; team; break;;
+    do_checks
+    if [ -f ${GPDIR}/username ]; then
+        GUZER=$(cat ${GPDIR}/username)
+        echo ""
+        echo "###################################################################"
+        echo ""
+        echo ${bldcya}"Your UserName is set to: ${GUZER}"${txtrst}
+        echo ""
+        echo "###################################################################"
+        echo ""
+      else
+        clear
+        read -p "Please enter your Gerrit UserName: " GUZER; clear
+        if [ ${safety} -eq "1" ]; then
+            while true; do
+                read -p "Your entered ${GUZER}.  Is this correct? (Yes/No) " correct1
+                case ${correct1} in
+                    Y*|y*|"") clear; echo ${GUZER} > ${GPDIR}/username; clear;
+                              echo "Your new gerrit username is: ${GUZER}"; break ;;
+                       N*|n*) clear; read -p "Re-Enter Gerrit UserName: " GUZER
+                              echo ${GUZER} > ${GPDIR}/username; clear
+                              echo "Your new gerrit username is: ${GUZER}"; break ;;
+                           *) clear; echo "Invalid Entry \"${correct1}\", Please enter y/yes or n/no";;
                 esac
             done
-			rm -f ${HOME}/.gerritpush/team
-			rm -f ${HOME}/.gerritpush/teamCHOICE
-			rm -f ${HOME}/.gerritpush/gerritURL
-			mkdir -p ${HOME}/.gerritpush; echo ${GTEAM[$i]} > ${HOME}/.gerritpush/team;
-			mkdir -p ${HOME}/.gerritpush; echo ${TEAM[$i]} > ${HOME}/.gerritpush/teamCHOICE;
-			mkdir -p ${HOME}/.gerritpush; echo ${URL[$i]} > ${HOME}/.gerritpush/gerritURL;
-			sleep 2;echo
-			clear; echo "Default Set to ${bldcya}${TEAM}${txtrst}"; echo
+          else
+            echo ${GUZER} > ${GPDIR}/username;
+            clear;
+        fi
+    fi
 }
 
+team() {
+    if [ -f ${GPDIR}/team ]; then
+        GTEAM=$(cat ${GPDIR}/team)
+        TEAM=$(cat ${GPDIR}/teamCHOICE)
+        [[ -f ${GPDIR}/gerritURL ]] && GURL=$(cat ${GPDIR}/gerritURL) || new_team
+    fi
+}
+
+new_team() {
+    do_checks
+    if [ -f ${GPDIR}/team ]; then
+        DisplayTeam=$(cat ${GPDIR}/teamCHOICE)
+        echo ""
+        echo "###################################################################"
+        echo ""
+        echo ${bldcya}"Your gerrit team is set to: ${DisplayTeam}"${txtrst}
+        echo ""
+        echo "###################################################################"
+        echo ""
+    fi
+    echo "Please Select your new Gerrit Team:"
+    echo "Enter the Corresponding Number"
+    select NUMBER in $(echo ${bldcya}${TEAM[@]}${txtrst}); do
+        case ${NUMBER} in
+            ${TEAM[0]}) i=0; break ;;
+            ${TEAM[1]}) i=1; break ;;
+            ${TEAM[2]}) i=2; break ;;
+            ${TEAM[3]}) i=3; break ;;
+            ${TEAM[4]}) i=4; break ;;
+            ${TEAM[5]}) i=5; break ;;
+            ${TEAM[6]}) i=6; break ;;
+            ${TEAM[7]}) i=7; break ;;
+            ${TEAM[8]}) i=8; break ;;
+            ${TEAM[9]}) i=9; break ;;
+           ${TEAM[10]}) i=10; break ;;
+           ${TEAM[11]}) i=11; break ;;
+           ${TEAM[12]}) i=12; break ;;
+           ${TEAM[13]}) i=13; break ;;
+           ${TEAM[14]}) i=14; break ;;
+           ${TEAM[15]}) i=15; break ;;
+           ${TEAM[16]}) i=16; break ;;
+           ${TEAM[17]}) i=17; break ;;
+           ${TEAM[18]}) i=18; break ;;
+           ${TEAM[19]}) i=19; break ;;
+            *) echo "Invalid Entry \"${NUMBER}\", Please enter from the options provided."; 
+               echo ""; echo ""; 
+               team; break;;
+        esac
+    done
+
+    echo ${GTEAM[$i]} > ${GPDIR}/team;
+    echo ${TEAM[$i]} > ${GPDIR}/teamCHOICE;
+    echo ${URL[$i]} > ${GPDIR}/gerritURL;
+    sleep 1; clear; 
+    echo "Default Set to ${bldcya}${TEAM[i]}${txtrst}"; echo
+}
 
 correct_commit() {
-				clear; echo ${bldcya}${MSSG}${txtrst}; echo
-				echo "Is this correct ??"
-				echo "Enter 1 for Yes and 2 for No"
-  				select correct2 in "Yes" "No"; do
-					case ${correct2} in
-        				Yes ) echo "Commit set to ${bldcya}${MSSG}${txtrst}"; break;;
-        				No ) echo "Re-enter commit message"; read MSSG; break;;
-        				* ) clear; echo "Invalid Entry ${correct2}, Please re-try"; echo; echo; correct_commit; break;;
-					esac
-  				done
+    clear
+    while true; do
+        echo ${MSSG}; echo
+        read -p "Is this correct ??" correct2
+       case ${correct2} in
+            Y*|y*|"") echo "Commit set to ${bldcya}${MSSG}${txtrst}"; break ;;
+               N*|n*) read -p "Re-enter commit message" MSSG ;;
+                   *) clear; echo "Invalid Entry \"${correct2}\". Please enter y/yes or n/no" ;;
+       esac
+    done
 }
 
+push_stuff(){
+    GUZER=$(cat ${GPDIR}/username)
+    GTEAM=$(cat ${GPDIR}/team)
+    BRANCH=$(git branch | sed -n '/\* /s///p')
+    GURL=$(cat ${GPDIR}/gerritURL)
+    PROJECT=$(grep "projectname" .git/config | awk -F "projectname = " '{print $2}' | sed -e 's/^[ \t]*//' )
+    [[ -z ${PROJECT} ]] && PROJECT=$(grep "url" .git/config | awk -F "url = " '{print $2}' | rev | cut -d/ -f1 | rev | cut -d. -f1)
+    git push ssh://${GUZER}@${GTEAM}${GURL}${PROJECT} HEAD:refs/\for/${BRANCH}
+}
 
 push() {
-		safety=`cat ${HOME}/.gerritpush/safety`
-		if [ ${safety} -eq "1" ]; then
-			echo -n "Are you sure you want to push? (y/n): "; read RESP
-			if [ "${RESP}" == "y" ] || [ "${RESP}" == "Y" ]; then
-             	GUZER=`cat ${HOME}/.gerritpush/username`
-                GTEAM=`cat ${HOME}/.gerritpush/team`
-                BRANCH=`git branch | sed -n '/\* /s///p'`
-                GURL=`cat ${HOME}/.gerritpush/gerritURL`
-                PROJECT=`grep "projectname" .git/config | awk -F"projectname = " '{print $2}' | sed -e 's/^[ \t]*//' `
-                if [ -z ${PROJECT} ]; then
-                	PROJECT=`grep "url" .git/config | awk -F"url = " '{print $2}' | rev | cut -d/ -f1 | rev | cut -d. -f1`
-                fi
-				git push ssh://${GUZER}@${GTEAM}${GURL}${PROJECT} HEAD:refs/\for/${BRANCH}
-			else
-				echo "Canceled"
-			fi
-		else
-			GUZER=`cat ${HOME}/.gerritpush/username`
-			GTEAM=`cat ${HOME}/.gerritpush/team`
-			BRANCH=`git branch | sed -n '/\* /s///p'`
-			GURL=`cat ${HOME}/.gerritpush/gerritURL`
-			PROJECT=`grep "projectname" .git/config | awk -F"projectname = " '{print $2}' | sed -e 's/^[ \t]*//' `
-			if [ -z ${PROJECT} ]; then
-                PROJECT=`grep "url" .git/config | awk -F"url = " '{print $2}' | rev | cut -d/ -f1 | rev | cut -d. -f1`
-			fi
-			git push ssh://${GUZER}@${GTEAM}${GURL}${PROJECT} HEAD:refs/\for/${BRANCH}
-		fi
+    do_checks
+    if [ ${safety} -eq "1" ]; then
+        while true; do
+            read -p "Are you sure you want to push? (Y/n): " RESP
+            case ${RESP} in
+                Y*|y*|"") push_stuff; break ;;
+                       *) echo "Canceled"; break ;; 
+            esac
+        done
+      else
+        push_stuff
+    fi
 }
-
 
 ap() {
-	safety=`cat ${HOME}/.gerritpush/safety`
-	git add -A
-	scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
-        echo "Add commit message below.
-		--------------------------"
-        read MSSG
-    if [ ${safety} -eq "1" ]; then
-        correct_commit
-    fi
-	git commit -a -m "${MSSG}"
-	push
+    do_checks
+    git add -A
+    scp -p -P 29418 ${GUZER}@${GTEAM}:hooks/commit-msg .git/hooks/
+    echo "Add commit message below."
+    echo "--------------------------"
+    read MSSG
+    [[ ${safety} -eq "1" ]] && correct_commit
+    git commit -a -m "${MSSG}"
+    push
 }
 
+ag() {
+    while true; do
+        echo "Enter the name of a new team to be added (PAC, CyanogenMod, etc.): "; read TNAME
+        [[ $(grep -i ${TNAME} ${ARRY} | wc -l) -gt 0 ]] && echo "${TNAME} is already on the list" && sleep 3 && error && break
+        echo "Enter the gerrit address (review.pac-rom.com, review.cyanogenmod.org, etc.)"; read TADDY
+        echo "Enter the name of the team's gerrit root directory (i.e. /, /Cyanogenmod, etc. )"; read TROOT
+        echo ""
+        echo "You entered the following:"
+        echo ""
+        echo \"${TNAME}\"; echo \"${TADDY}\"; echo \"${TROOT}\"
+        echo ""
+        echo "Is this information correct?"
+        read -p "(**Note - Entering incorrect information can/will cause problems): " answer
+        case ${answer} in
+            Y*|y*|"") echo "\"${TNAME}\"" >> ${ARRY}
+                      echo "\"${TADDY}\"" >> ${ARRY}
+                      echo -e "\":29418${TROOT}/\"\n" >> ${ARRY}; break ;;
+               N*|n*) : ;;
+        esac
+    done
+}
 
 amend() {
-		echo -n "Have you edited the files?/Do you want to change commit message? (y/n):"; read RESPa
-		if [ "${RESPa}" == "y" ] || [ "${RESPa}" == "Y" ]; then
-			git add -A
-			git commit --amend
-			push
-		elif [ "${RESPa}" == "n" ] || [ "${RESPa}" == "N" ]; then
-			echo "Please edit them"
-			echo "Press 1 after you edit them"
-			read amend1
-			if [ ${amend1} == "1" ]; then
-				git add -A
-				git commit --amend
-				push
-			else
-				echo "Take your time and come back when you are ready"
-			fi
-		fi
+    while true; do
+        read -p "Have you edited the files?/Do you want to change commit message? (Y/n): " RESPa
+        case ${RESPa} in
+            Y*|y*|"") git add -A; git commit --amend; push; break ;;
+               N*|n*) echo "Please edit them and press [ENTER] when finished," 
+                      read -p "or press \"0\" to quit and come back later: "; answer
+                      case $answer in
+                          "") : ;;
+                           0) break ;;
+                      esac ;;
+        esac
+    done
 }
-
 
 author() {
-		echo "Please enter username of author"
-		echo -n "Username: "
-		read auser
-		git commit --amend --author ${auser}
+    echo "Please enter username of author"
+    read -p "Username: " auser
+    git commit --amend --author ${auser}
 }
-
 
 correct_gname() {
-				echo "Your entered ${bldcya}${GUZER}${txtrst} is this correct?"
-				echo "Enter ${bldcya}(Yes)${txtrst} or ${bldred}(No)${txtrst}"
-				select correct1 in "Yes" "No"; do
-					case ${correct1} in
-						Yes ) mkdir ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
-						No ) echo -n "Re-Enter Gerrit UserName: "; read GUZER; echo; mkdir -p ${HOME}/.gerritpush; echo ${GUZER} > ${HOME}/.gerritpush/username; echo "Your new gerrit username is: ${GUZER}"; break;;
-						* ) clear; echo "Invalid Entry ${correct1}, Please re-try"; echo; echo; correct_gname break ;;
-					esac
-				done
+    do_checks
+    while true; do
+        read -p "Your entered ${bldcya}${GUZER}${txtrst}, is this correct? " correct1
+        case ${correct1} in
+            Y*|y*|"") echo ${GUZER} > ${GPDIR}/username; 
+                      echo "Your new gerrit username is: ${GUZER}"; break ;;
+               N*|n*) read -p "Re-Enter Gerrit UserName: " GUZER; 
+                      echo ${GUZER} > ${GPDIR}/username; echo "Your new gerrit username is: ${GUZER}"; break ;;
+                   *) clear; echo "Invalid Entry ${correct1}.  Please enter y/yes or n/no" ;;
+        esac
+    done
 }
-
 
 nameq_question() {
-				echo "Enter an option:"
-				echo " 1. (View) your current gerrit username"
-				echo " 2. Enter a (New) gerrit username"
-				select NAME in "View" "New"; do
-					case ${NAME} in
-						View )  if [ -f ${HOME}/.gerritpush/username ]; then
-									echo "Your current gerrit username is: ${bldcya}${GUZER}${txtrst}";
-								else
-									echo "No gerrit username found..";
-								fi; break;;
-						New ) echo -n "Enter your new gerrit username: "; read GUZER;
-								if [ ${safety} -eq "1" ]; then
-									correct_gname;
-								fi; break;;
-						* ) echo "${NAME} is not a valid option (Choose View or New)"; nameq_question; break;;
-					esac
-				done
+    echo "Enter an option:"
+    select NAME in "View your current gerrit username" "Enter a New gerrit username"; do
+        case ${NAME} in
+            *View*) [[ -f ${GPDIR}/username ]] && echo "Your current gerrit username is: ${bldcya}${GUZER}${txtrst}" \
+                    || echo "No gerrit username found.."; break ;;
+             *New*) read -p "Enter your new gerrit username: " GUZER; 
+                    [[ ${safety} -eq "1" ]] && correct_gname; break ;;
+                * ) echo "That is not a valid option (Choose 1 or 2)";
+        esac
+    done
 }
 
+ssh_msg() {
+    echo "Go to ${TEAM} Gerrit (${GTEAM}), sign in, go to settings,
+and click on SSH Public Keys. Use Control + Click to open URL.
+
+Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
+    read -p "Press [Enter] to open file..."
+}
 
 sshkey() {
-		team
-		echo ""
-		echo "Your gerrit team is set to: ${bldcya}${TEAM}${txtrst}"
-		echo ""
-		echo "You will have to set this up for every Team's Gerrit"
-		echo "But can use the same sshkeys for all"
-		echo ""
-		if [ -e ${HOME}/.ssh/id_rsa.pub ]; then
-			echo "SSH Key already exists.
-			Go to ${TEAM} Gerrit (${GTEAM}), sign in, go to settings,
-			and click on SSH Public Keys. Use Control + Click to open URL.
-			
-			Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
-			read -p "Press [Enter] to open file..."
-			gnome-open ${HOME}/.ssh/id_rsa.pub
-		else
-			ssh-keygen
-			echo "Go to ${TEAM} Gerrit (${GTEAM}), sign in, go to settings,
-			and click on SSH Public Keys. Use Control + Click to open URL.
-
-			Click on add SSH Key and copy and paste contents of file from .ssh/id_rsa.pub."
-			read -p "Press [Enter] to open file..."
-			gnome-open ${HOME}/.ssh/id_rsa.pub
-		fi
+    team
+    echo ""
+    echo "Your gerrit team is set to: ${bldcya}${TEAM}${txtrst}"
+    echo ""
+    echo "You will have to set this up for every Team's Gerrit"
+    echo "But can use the same sshkeys for all"
+    echo ""
+    if [ -e ${HOME}/.ssh/id_rsa.pub ]; then
+        echo "SSH Key already exists."
+        ssh_msg
+        gnome-open ${HOME}/.ssh/id_rsa.pub
+      else
+        ssh-keygen
+        ssh_msg
+        gnome-open ${HOME}/.ssh/id_rsa.pub
+    fi
 }
 
-
 new() {
-		curl http:/pac-rom.com/downloads/universal-review > ${HOME}/.gerritpush/.new
-		curl http:/pac-rom.com/downloads/projects > ${HOME}/.gerritpush/.newproject
-		sed -i '12,132d' ${HOME}/.gerritpush/.new
-		NEWB=`grep BUILD= ${HOME}/.gerritpush/.new | sed "s/BUILD=//g"`
-		NEWV=`grep VERSION= ${HOME}/.gerritpush/.new | sed "s/VERSION=//g"`
+    curl http:/pac-rom.com/downloads/universal-review > ${GPDIR}/.new
+    curl http:/pac-rom.com/downloads/projects > ${GPDIR}/.newproject
+    sed -i '12,132d' ${GPDIR}/.new
+    NEWB=$(grep BUILD= ${GPDIR}/.new | sed "s/BUILD=//g")
+    NEWV=$(grep VERSION= ${GPDIR}/.new | sed "s/VERSION=//g")
+}
+
+update_stuff(){
+    rm -f ${GPDIR}/universal-review; 
+    mv ${GPDIR}/.new ${HOME}/bin/universal-review; 
+    chmod +x ${HOME}/bin/universal-review; 
+    rm -f ${GPDIR}/teamProjects; 
+    mv ${GPDIR}/.newproject ${HOME}/bin/teamProjects; 
+    chmod +x ${HOME}/bin/teamProjects; echo; 
+    echo "Successfully updated to v${NEWV}!";
 }
 
 ask_the_question() {
-					safety=`cat ${HOME}/.gerritpush/safety`
-					if [ ${safety} -eq "1" ]; then
-						echo -n "Are you sure you want to update to version: ${NEWV} build: ${NEWB}? (yes/no)"
-						select correct4 in "Yes" "No"; do
-							case ${correct4} in
-								Yes ) rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; rm -f ${HOME}/.gerritpush/teamProjects; mv ${HOME}/.gerritpush/.newproject ${HOME}/bin/teamProjects; chmod +x ${HOME}/bin/teamProjects; echo; echo "Successfully updated to v${NEWV}!"; break;;
-								No ) echo "Update canceled"; break ;;
-								* ) clear; echo "Invalid option ${correct4}, Please try again..."; echo; ask_the_question; break;;
-							esac
-						done
-					else
-						rm -f ${HOME}/.gerritpush/universal-review; mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review; chmod +x ${HOME}/bin/universal-review; rm -f ${HOME}/.gerritpush/teamProjects; mv ${HOME}/.gerritpush/.newproject ${HOME}/bin/teamProjects; chmod +x ${HOME}/bin/teamProjects; echo; echo "Successfully updated to v${NEWV}!"
-					fi
+    do_checks
+    if [ ${safety} == "1" ]; then
+        while true; do
+            read -p "Are you sure you want to update to version: ${NEWV} build: ${NEWB}? (yes/no)" correct4
+            case ${correct4} in
+                Y*|y*|"") update_stuff; break ;;
+                   N*|n*) echo "Update canceled"; break ;;
+                      * ) clear; echo "Invalid option ${correct4}, Please try again...";;
+            esac
+        done
+      else
+        update_stuff
+    fi
 }
-
 
 update() {
-		new
-		if [ "${BUILD}" == "${NEWB}" ]; then
-			echo; echo "Already up to date (v${VERSION})"
-		elif [[ "${BUILD}" != "${NEWB}" ]]; then
-			ask_the_question
-		fi
+    new
+    [[ "${BUILD}" == "${NEWB}" ]] && echo "" && echo "Already up to date (v${VERSION})" || ask_the_question
 }
-
 
 uf() {
-	new
-	mv ${HOME}/.gerritpush/.new ${HOME}/bin/universal-review
-	chmod +x ${HOME}/bin/universal-review
-	echo "Forced update to v${NEWV}!"
+    new
+    mv ${GPDIR}/.new ${HOME}/bin/universal-review
+    chmod +x ${HOME}/bin/universal-review
+    echo "Forced update to v${NEWV}!"
 }
 
+safety() {
+    do_checks
+    [[ ${safety} == "1" ]] && DisplaySafety="On" || DisplaySafety="Off"
+    echo ""
+    echo "###################################################################"
+    echo ""
+    echo "Your Safety is set to: ${bldcya}${DisplaySafety}${txtrst}"
+    echo ""
+    echo "###################################################################"
+    echo ""
 
-saftey() {
-        if [ -f ${HOME}/.gerritpush/safety ]; then
-            TEMP=`cat ${HOME}/.gerritpush/safety`
-            if [ ${TEMP} == 1}; then
-                DisplaySafety="On"
-            else
-                DisplaySafety="Off"
-            fi
-            echo ""
-            echo "###################################################################"
-            echo ""
-            echo "Your Safety is set to: ${bldcya}${DisplaySafety}${txtrst}"
-            echo ""
-            echo "###################################################################"
-            echo ""
-        fi
-        echo "Would you like to change Safety checks? (y/n)"
-        read SAFE
-        if [ "${SAFE}" == "y" ] || [ "${RESP}" == "Y" ]; then
-            echo "By turning safety off your taking the rish of messing things up royally"
-            echo
-            echo "You do this at your own risk"
-            echo
-            echo "Turn ${bldcya}(On)${txtrst} or ${bldred}(Off)${txtrst} ?"
-            select safety1 in "On" "Off"; do
-                case ${safety} in
-                    On ) rm -f ${HOME}/.gerritpush/safety; mkdir -p ${HOME}/.gerritpush; echo "1" > ${HOME}/.gerritpush/safety; break;;
-                    Off ) rm -f ${HOME}/.gerritpush/safety; mkdir -p ${HOME}/.gerritpush; echo "0" > ${HOME}/.gerritpush/safety; break;;
-                    * ) clear; echo "Invalid Entry ${safety1}, Please re-try"; echo; echo; saftey break ;;
-                esac
-            done
-		fi
+    while true; do
+        read -p "Would you like to change Safety checks? (y/n): " SAFE
+        case ${SAFE} in
+            Y*|y*|"") echo "By turning safety off you're taking the risk of messing things up royally";
+                      echo "";
+                      echo "You do this at your own risk";
+                      echo "";
+                      echo "Turn ${bldcya}(On)${txtrst} or ${bldred}(Off)${txtrst}?";
+                      select safety1 in "On" "Off"; do
+                          case ${safety1} in
+                              On) echo "1" > ${GPDIR}/safety; break ;;
+                             Off) echo "0" > ${GPDIR}/safety; break ;;
+                               *) clear; echo "Invalid Entry ${safety1}, Please re-try";;
+                          esac
+                      done ;;
+                   *) echo "Canceled"; break ;;
+        esac
+    done
 }
                         
-
 setup() {
-        if [ ! -f ${HOME}/.gerritpush/safety ]; then
-            mkdir -p ${HOME}/.gerritpush; echo "1" > ${HOME}/.gerritpush/safety;
-        fi
-		if [ ! -f ${HOME}/.gerritpush/arrays ]; then
-            curl http:/pac-rom.com/downloads/projects > ${HOME}/.gerritpush/arrays
-        fi
-        user
-        team
+    do_checks
+    user
+    team
 }
-
 
 error() {
-		echo "###################################################################"
+    echo "###################################################################"
 
-		if [ -f ${HOME}/.gerritpush/username ]; then
-			DisplayUser=`cat ${HOME}/.gerritpush/username`
-			echo "Your gerrit username is: ${bldcya}${DisplayUser}${txtrst}"
-		fi
+    [[ -f ${GPDIR}/username ]] && DisplayUser=$(cat ${HOME}/.gerritpush/username) && \
+        echo "Your gerrit username is: ${DisplayUser}"
+    [[ -f ${GPDIR}/team ]] && DisplayCHOICE=$(cat ${GPDIR}/teamCHOICE) && \
+        echo "Your gerrit team is set to: ${DisplayCHOICE}"
+    [[ -f ${GPDIR}/safety ]] && [[ $(cat ${GPDIR}/safety) == "1" ]] && DisplaySafety="On" || DisplaySafety="Off"
+        echo "Your Safety Checks are set to: ${bldcya}${DisplaySafety}${txtrst}"
 
-		if [ -f ${HOME}/.gerritpush/team ]; then
-			DisplayCHOICE=`cat ${HOME}/.gerritpush/teamCHOICE`
-			echo "Your gerrit team is set to: ${bldcya}${DisplayCHOICE}${txtrst}"
-		fi
-
-		if [ -f ${HOME}/.gerritpush/safety ]; then
-			Saftey=`cat ${HOME}/.gerritpush/safety`
-			if [ ${Saftey} == 1}; then
-				DisplaySafety="On"
-			else
-				DisplaySafety="Off"
-			fi
-			echo ${bldcya}"Your Safety Checks are set to: ${bldcya}${DisplaySafety}${txtrst}"
-		fi
-		echo ${bldylw}"###################################################################"
-		sleep 4;
-		echo "#                                                                 #"
-		echo "#                     Universal Gerrit Review                     #"
-		echo "#                                                                 #"
-		echo "#       Created by Sniper/Goldflame09/wedgess/Papa Smurf151       #"
-		echo "#                                                                 #"
-		echo "#                        A PAC-man Project                        #"
-		echo "#                                                                 #"
-		echo "###################################################################"${txtrst}
-		sleep 3;
-		echo ""
-        echo
-        echo "Usage: universal-review [-short command]"
-        echo "Or: universal-review [long command]"
-        echo
-        echo
-        echo "###################################################################"
-        echo
-        echo ${bldred}"                           COMMANDS: "${txtrst}
-        echo
-        echo " ${bldcya}setup (-su)${txtrst} --- ${bldylw}Intital Setup${txtrst} "
-        echo " ${bldcya}team (-nt)${txtrst} --- ${bldylw}Change Team Gerrits${txtrst} "
-        echo " ${bldcya}add+push (-ap)${txtrst} --- ${bldylw}Add and push to gerrit${txtrst} "
-        echo " ${bldcya}amend (-am)${txtrst} --- ${bldylw}Amend the commit and push${txtrst} "
-        echo " ${bldcya}author (-au)${txtrst} --- ${bldylw}Change author of commit${txtrst} "
-        echo " ${bldcya}force (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
-        echo " ${bldcya}name (-n)${txtrst} --- ${bldylw}View or edit your gerrit username${txtrst} "
-        echo " ${bldcya}push (-p)${txtrst} --- ${bldylw}Push to gerrit${txtrst} "
-        echo " ${bldcya}sshkey (-ssh)${txtrst} --- ${bldylw}Create/show SSH key to put on Gerrit${txtrst} "
-        echo " ${bldcya}safety (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
-        echo " ${bldcya}update (-u)${txtrst} --- ${bldylw}Check for and download an update if available${txtrst} "
-        echo
-        echo "###################################################################"
-        echo
-        echo " If you encounter problems, check if:"
-        echo " 1. Your gerrit username is correct (using the name option)"
-        echo " 2. Your current branch is correct"
-        echo " 3. Your public ssh key is attached to your gerrit profile"
-        echo
-        echo " If you still encounter problems, ask at Universal thread:"
-        echo " ${bldcya}http://forum.pac-rom.com${txtrst} . . . Press Control + Click to open URL"
-        echo
+    echo ${bldylw}"###################################################################"
+    sleep 4;
+    echo "#                                                                 #"
+    echo "# Universal Gerrit Review                                         #"
+    echo "#                                                                 #"
+    echo "# Created by Sniper/Goldflame09/wedgess/Papa Smurf151/Soupmagnet  #"
+    echo "#                                                                 #"
+    echo "# A PAC-man Project                                               #"
+    echo "#                                                                 #"
+    echo "###################################################################"${txtrst}
+    sleep 3;
+    echo ""
+    echo ""
+    echo "Usage: universal-review [-short command]"
+    echo "Or: universal-review [long command]"
+    echo ""
+    echo ""
+    echo "###################################################################"
+    echo ""
+    echo ${bldred}" COMMANDS: "${txtrst}
+    echo
+    echo " ${bldcya}setup (-su)${txtrst} --- ${bldylw}Intital Setup${txtrst} "
+    echo " ${bldcya}team (-nt)${txtrst} --- ${bldylw}Change Team Gerrits${txtrst} "
+    echo " ${bldcya}add+push (-ap)${txtrst} --- ${bldylw}Add and push to gerrit${txtrst} "
+    echo " ${bldcya}amend (-am)${txtrst} --- ${bldylw}Amend the commit and push${txtrst} "
+    echo " ${bldcya}author (-au)${txtrst} --- ${bldylw}Change author of commit${txtrst} "
+    echo " ${bldcya}force (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
+    echo " ${bldcya}name (-n)${txtrst} --- ${bldylw}View or edit your gerrit username${txtrst} "
+    echo " ${bldcya}push (-p)${txtrst} --- ${bldylw}Push to gerrit${txtrst} "
+    echo " ${bldcya}sshkey (-ssh)${txtrst} --- ${bldylw}Create/show SSH key to put on Gerrit${txtrst} "
+    echo " ${bldcya}safety (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
+    echo " ${bldcya}update (-u)${txtrst} --- ${bldylw}Check for and download an update if available${txtrst} "
+    echo
+    echo "###################################################################"
+    echo
+    echo " If you encounter problems, check if:"
+    echo " 1. Your gerrit username is correct (using the name option)"
+    echo " 2. Your current branch is correct"
+    echo " 3. Your public ssh key is attached to your gerrit profile"
+    echo
+    echo " If you still encounter problems, ask at Universal thread:"
+    echo " ${bldcya}http://forum.pac-rom.com${txtrst} . . . Press Control + Click to open URL"
+    echo
 }
-
-
-if [ ! -d ${HOME}/bin ]; then
-        mkdir -p ${HOME}/bin
-        echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
-        echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
-fi
 
 setup
 clear
 
+if [ ! -d ${HOME}/bin ]; then
+    mkdir -p ${HOME}/bin
+    echo "# Add ~/bin to PATH" >> ${HOME}/.bashrc
+    echo "export PATH=${PATH}:~/bin" >> ${HOME}/.bashrc
+fi
 
 case $1 in
-   -n|name)nameq_question;;
-   -u|update)update;;
-   -p|push)push;;
-   -nt|team)new_team;;
-   -su|setup)setup;;
-   -ssh|sshkey)sshkey;;
-   -ap|add+push)ap;;
-   -sa|safety)safety;;
-   -am|amend)amend;;
-   -uf|force)uf;;
-   -h|help|*)error;;
+    -n|name)nameq_question;;
+    -u|update)update;;
+    -p|push)push;;
+    -nt|team)new_team;;
+    -su|setup)setup;;
+    -ssh|sshkey)sshkey;;
+    -ap|add+push)ap;;
+    -sa|saftey)safety;;
+    -am|amend)amend;;
+    -uf|force)uf;;
+    -h|help|*)error;;
 esac
