@@ -48,6 +48,10 @@ do_checks(){
     [[ ! -d ${GPDIR} ]] && mkdir -p ${GPDIR} && sleep .5
     [[ ! -f ${GPDIR}/config ]] && write_config
     [[ ! -f ${ARRY} ]] && curl http://pac-rom.com/downloads/projects > ${ARRY}
+	ARRY=${GPDIR}/projects
+	TEAM=($(awk '{print $1}' RS="" $ARRY))
+	GTEAM=($(awk '{print $2}' RS="" $ARRY))
+	URL=($(awk '{print $3}' RS="" $ARRY))
     safety=$(get safety)
 }
 
