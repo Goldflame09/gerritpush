@@ -377,6 +377,27 @@ setup() {
     team
 }
 
+advanced () {
+echo -n "Are you sure you want to change advanced options? (yes/no): "
+    read ADVC
+    case ${ADVC} in
+         Y*|y*) clear; advance_options;;
+         N*|n*) echo "Not changing advanced options"; sleep 2; clear; error;
+    esac
+}
+
+advance_options () {
+    echo "######################################"
+    echo "#          Advanced Options          #"
+    echo "######################################"
+
+    echo "COMMANDS:"
+    echo ""
+    echo "    addgerrit (-ag) --- Add a gerrit"
+    echo " ${bldcya}force (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
+    echo " ${bldcya}safety (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
+}
+
 error() {
     echo "###################################################################"
 
@@ -411,12 +432,11 @@ error() {
     echo " ${bldcya}add+push (-ap)${txtrst} --- ${bldylw}Add and push to gerrit${txtrst} "
     echo " ${bldcya}amend (-am)${txtrst} --- ${bldylw}Amend the commit and push${txtrst} "
     echo " ${bldcya}author (-au)${txtrst} --- ${bldylw}Change author of commit${txtrst} "
-    echo " ${bldcya}force (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
     echo " ${bldcya}name (-n)${txtrst} --- ${bldylw}View or edit your gerrit username${txtrst} "
     echo " ${bldcya}push (-p)${txtrst} --- ${bldylw}Push to gerrit${txtrst} "
     echo " ${bldcya}sshkey (-ssh)${txtrst} --- ${bldylw}Create/show SSH key to put on Gerrit${txtrst} "
-    echo " ${bldcya}safety (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
     echo " ${bldcya}update (-u)${txtrst} --- ${bldylw}Check for and download an update if available${txtrst} "
+    echo " ${bldcya}advanced (-av)${txtrst} --- ${bldylw}Advanced options${txtrst} "
     echo
     echo "###################################################################"
     echo
@@ -450,5 +470,7 @@ case $1 in
     -sa|saftey)safety;;
     -am|amend)amend;;
     -uf|force)uf;;
+    -av|advanced)advanced;;
+    -ag|addgerrit)ag;;
     -h|help|*)error;;
 esac
