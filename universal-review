@@ -11,11 +11,6 @@ BUILD=1
 
 GPDIR="${HOME}/.gerritpush"
 
-ARRY=${GPDIR}/projects
-TEAM=($(awk '{print $1}' RS="" $ARRY))
-GTEAM=($(awk '{print $2}' RS="" $ARRY))
-URL=($(awk '{print $3}' RS="" $ARRY))
-
 red=$(tput setaf 1) # red
 grn=$(tput setaf 2) # green
 ylw=$(tput setaf 3) # yellow
