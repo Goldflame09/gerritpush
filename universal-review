@@ -393,9 +393,9 @@ advance_options () {
 
     echo "COMMANDS:"
     echo ""
-    echo "    addgerrit (-ag) --- Add a gerrit"
-    echo " ${bldcya}force (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
-    echo " ${bldcya}safety (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
+    echo " ${bldcya}addgerrit (-ag)${txtrst} --- ${bldylw}Add a new gerrit${txtrst} "
+    echo " ${bldcya}force     (-uf)${txtrst} --- ${bldylw}Force the script to grab a new version${txtrst} "
+    echo " ${bldcya}safety    (-sa)${txtrst} --- ${bldylw}Toggle Safety checks on and off${txtrst} "
 }
 
 error() {
@@ -427,16 +427,16 @@ error() {
     echo ""
     echo ${bldred}" COMMANDS: "${txtrst}
     echo
-    echo " ${bldcya}setup (-su)${txtrst} --- ${bldylw}Intital Setup${txtrst} "
-    echo " ${bldcya}team (-nt)${txtrst} --- ${bldylw}Change Team Gerrits${txtrst} "
-    echo " ${bldcya}add+push (-ap)${txtrst} --- ${bldylw}Add and push to gerrit${txtrst} "
-    echo " ${bldcya}amend (-am)${txtrst} --- ${bldylw}Amend the commit and push${txtrst} "
-    echo " ${bldcya}author (-au)${txtrst} --- ${bldylw}Change author of commit${txtrst} "
-    echo " ${bldcya}name (-n)${txtrst} --- ${bldylw}View or edit your gerrit username${txtrst} "
-    echo " ${bldcya}push (-p)${txtrst} --- ${bldylw}Push to gerrit${txtrst} "
-    echo " ${bldcya}sshkey (-ssh)${txtrst} --- ${bldylw}Create/show SSH key to put on Gerrit${txtrst} "
-    echo " ${bldcya}update (-u)${txtrst} --- ${bldylw}Check for and download an update if available${txtrst} "
-    echo " ${bldcya}advanced (-av)${txtrst} --- ${bldylw}Advanced options${txtrst} "
+    echo " ${bldcya}setup    (-su)${txtrst}  --- ${bldylw}Intital Setup${txtrst} "
+    echo " ${bldcya}team     (-nt)${txtrst}  --- ${bldylw}Change Team Gerrits${txtrst} "
+    echo " ${bldcya}add+push (-ap)${txtrst}  --- ${bldylw}Add and push to gerrit${txtrst} "
+    echo " ${bldcya}amend    (-am)${txtrst}  --- ${bldylw}Amend the commit and push${txtrst} "
+    echo " ${bldcya}author   (-au)${txtrst}  --- ${bldylw}Change author of commit${txtrst} "
+    echo " ${bldcya}name     (-n)${txtrst}   --- ${bldylw}View or edit your gerrit username${txtrst} "
+    echo " ${bldcya}push     (-p)${txtrst}   --- ${bldylw}Push to gerrit${txtrst} "
+    echo " ${bldcya}sshkey   (-ssh)${txtrst} --- ${bldylw}Create/show SSH key to put on Gerrit${txtrst} "
+    echo " ${bldcya}update   (-u)${txtrst}   --- ${bldylw}Check for and download an update if available${txtrst} "
+    echo " ${bldcya}advanced (-av)${txtrst}  --- ${bldylw}Advanced options${txtrst} "
     echo
     echo "###################################################################"
     echo
