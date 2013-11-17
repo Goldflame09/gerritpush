@@ -365,7 +365,7 @@ safety() {
                              Off) save safety 0; break ;;
                                *) clear; echo "Invalid Entry ${safety1}, Please re-try";;
                           esac
-                      done ;;
+                      done ; break;;
                    *) echo "Canceled"; break ;;
         esac
     done
@@ -407,7 +407,7 @@ error() {
     echo "Your Safety Checks are set to: ${bldcya}${DisplaySafety}${txtrst}"
 
     echo ${bldylw}"###################################################################"
-    sleep 4;
+    sleep 3;
     echo "#                                                                 #"
     echo "# Universal Gerrit Review                                         #"
     echo "#                                                                 #"
@@ -416,7 +416,7 @@ error() {
     echo "# A PAC-man Project                                               #"
     echo "#                                                                 #"
     echo "###################################################################"${txtrst}
-    sleep 3;
+    sleep 2
     echo ""
     echo ""
     echo "Usage: universal-review [-short command]"
