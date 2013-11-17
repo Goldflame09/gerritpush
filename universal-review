@@ -416,7 +416,7 @@ error() {
     echo "# A PAC-man Project                                               #"
     echo "#                                                                 #"
     echo "###################################################################"${txtrst}
-    sleep 2
+    sleep 2;
     echo ""
     echo ""
     echo "Usage: universal-review [-short command]"
